@@ -61,7 +61,7 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
-
+echo This is ver 1.0.1
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 if [[ $app_location == *"http"* ]];
 then
