@@ -126,7 +126,7 @@ case $sign_method in
 						keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
 						keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app ../$app_file \
+							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
 							--sign_on_appdome \
