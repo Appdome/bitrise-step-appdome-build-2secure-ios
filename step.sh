@@ -28,7 +28,7 @@ download_file() {
 	file_location=$1
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
-	curl $file_location --output $downloaded_file && echo $downloaded_file
+	curl -L $file_location --output $downloaded_file && echo $downloaded_file
 }
 
 download_files_from_url_list() {
