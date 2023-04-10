@@ -62,7 +62,7 @@ convert_env_var_to_url_list() {
 }
 
 if [[ -z $APPDOME_API_KEY ]]; then
-	echo "No APPDOME_API_KEY was provided. Exiting."
+	echo 'No APPDOME_API_KEY was provided. Exiting.'
 	exit 1
 fi
 
