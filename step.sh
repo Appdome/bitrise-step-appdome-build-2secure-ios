@@ -61,6 +61,11 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
+if [[ -z $APPDOME_API_KEY ]]; then
+	echo "No APPDOME_API_KEY was provided. Exiting."
+	exit 1
+fi
+
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 if [[ $app_location == *"http"* ]];
 then
