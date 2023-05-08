@@ -8,7 +8,7 @@
 # - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
 
 title: |-
-  Appdome-Build-2Secure step for iOS
+  Appdome-Build-2Secure for iOS
 summary: |
   Builds an iOS mobile app using Appdome's platform
 description: |
