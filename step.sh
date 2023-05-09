@@ -74,7 +74,7 @@ else
 	app_file=$app_location
 fi
 
-ls -al
+# ls -al
 mkdir output
 certificate_output=../output/certificate.pdf
 output=../output/Appdome_$(basename $app_file)
@@ -146,5 +146,5 @@ esac
 
 cd ../output
 # rm -rf appdome-api-bash
-ls -al
+# ls -al
 cp * $BITRISE_DEPLOY_DIR

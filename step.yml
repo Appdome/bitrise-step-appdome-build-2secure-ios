@@ -13,9 +13,9 @@ summary: |
   Builds an iOS mobile app using Appdome's platform
 description: |
   Integration that allows activating security and app protection features, building and signing mobile apps using Appdome's API. For details see: https://www.appdome.com/how-to/appsec-release-orchestration/mobile-appsec-cicd/use-appdome-build-2secure-step-for-bitrise
-website: https://github.com/Appdome/bitrise_build-2secure-ios
-source_code_url: https://github.com/Appdome/bitrise_build-2secure-ios
-support_url: https://github.com/Appdome/bitrise_build-2secure-ios/issues
+website: https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios
+source_code_url: https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios
+support_url: https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios/issues
 
 # If this step should be available only for certain project types
 # just uncomment this `project_type_tags` section and include all the
@@ -55,11 +55,11 @@ type_tags:
 # You can find more information about this in the documentation here:
 # https://devcenter.bitrise.io/en/steps-and-workflows/developing-your-own-bitrise-step/developing-a-new-step.html#submodules-and-step-dependencies
 #
-# deps:
-#   brew:
-#   - name: cmake
-#   apt_get:
-#   - name: cmake
+deps:
+  brew:
+  - name: curl
+  apt_get:
+  - name: curl
 
 
 toolkit:
@@ -70,8 +70,8 @@ toolkit:
 inputs:
     - app_location: $BITRISE_IPA_PATH 
       opts:
-        title: "App file URL"
-        summary: "URL to app file"
+        title: "App file URL or EnvVar"
+        summary: "URL to app file (ipa) or an EnvVar representing its path (i.e. $BITRISE_IPA_PATH)"
         is_required: true
         
     - fusion_set_id: 
