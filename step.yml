@@ -127,13 +127,19 @@ inputs:
 #        value_options: []
 
 outputs:
-#
-#
-#  - EXAMPLE_STEP_OUTPUT:
-#    opts:
-#      title: "Example Step Output"
-#      summary: Summary. No more than 2-3 sentences.
-#      description: |
-#        Description of this output.
-#
-#        Can be Markdown formatted text.
+- APPDOME_SECURED_IPA_PATH:  
+  opts:    
+    title: Secured .ipa file path   
+    summary: Local path of the secured .ipa file
+    description: |
+        Local path of the secured .ipa file. Available when 'Signing Method' set to 'On-Appdome' or 'Private-Signing'
+- APPDOME_PRIVATE_SIGN_SCRIPT_PATH:  
+  opts:    
+    title: .sh sign script file path   
+    summary: Local path of the .sh sign script file
+    description: |
+        Local path of the .sh sign script file. Available when 'Signing Method' set to 'Auto-Dev-Signing'
+- APPDOME_CERTIFICATE_PATH:  
+  opts:    
+    title: Certified Secure Certificate .pdf file path   
+    summary: Local path of the Certified Secure Certificate .pdf file
