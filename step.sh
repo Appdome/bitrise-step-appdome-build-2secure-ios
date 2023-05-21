@@ -142,8 +142,6 @@ case $sign_method in
 						;;
 esac
 
-ls -al
-
 if [[ $secured_app_output == *.sh ]]; then
 	echo $secured_app_output | envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH
 else
