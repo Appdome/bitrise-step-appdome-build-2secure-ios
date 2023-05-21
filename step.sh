@@ -74,10 +74,8 @@ else
 	app_file=$app_location
 fi
 
-# ls -al
-mkdir output
-certificate_output=../output/certificate.pdf
-output=../output/Appdome_$(basename $app_file)
+certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
+secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
 
 tm=""
 if [[ -n $team_id ]]; then
@@ -110,7 +108,7 @@ case $sign_method in
 							--private_signing \
 							--provisioning_profiles $pf_list \
 							$en \
-							--output $output \
+							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
 						;;
@@ -122,7 +120,7 @@ case $sign_method in
 							--auto_dev_private_signing \
 							--provisioning_profiles $pf_list \
 							$en \
-							--output $output \
+							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
 						;;
@@ -138,13 +136,15 @@ case $sign_method in
 							--keystore_pass $keystore_pass \
 							--provisioning_profiles $pf_list \
 							$en \
-							--output $output \
+							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
 						;;
 esac
 
-cd ../output
-# rm -rf appdome-api-bash
-# ls -al
-cp * $BITRISE_DEPLOY_DIR
+if [[ $secured_app_output == *.sh ]]; then
+	echo $secured_app_output | envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH
+else
+	echo $secured_app_output | envman add --key APPDOME_SECURED_IPA_PATH
+fi
+echo $certificate_output | envman add --key APPDOME_CERTIFICATE_PATH
