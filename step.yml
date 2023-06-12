@@ -106,7 +106,16 @@ inputs:
         description: "iOS Entitlement EnvVar/s (separated by space)"
         is_required: true
     
+    - build_logs: "false"
+      opts:
+        title: "Build with logs?"
+        description: "Build with diagnostic logs?"
+        value_options:
+        - "true"
+        - "false"
+        is_required: true    
         
+            
 #   - output_location: 
 #      opts:
 #        title: "Build output file"

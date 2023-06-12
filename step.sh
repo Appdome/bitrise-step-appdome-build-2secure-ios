@@ -99,6 +99,11 @@ if [[ -n $entitlements ]]; then
 	en="--entitlements ${ef_list}"
 fi
 
+bl=""
+if [[ $build_logs == "true" ]]; then
+	bl="-bl"
+fi
+
 case $sign_method in
 "Private-Signing")		echo "Private Signing"						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
@@ -108,6 +113,7 @@ case $sign_method in
 							--private_signing \
 							--provisioning_profiles $pf_list \
 							$en \
+							$bl \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
@@ -120,6 +126,7 @@ case $sign_method in
 							--auto_dev_private_signing \
 							--provisioning_profiles $pf_list \
 							$en \
+							$bl \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
@@ -136,6 +143,7 @@ case $sign_method in
 							--keystore_pass $keystore_pass \
 							--provisioning_profiles $pf_list \
 							$en \
+							$bl \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
