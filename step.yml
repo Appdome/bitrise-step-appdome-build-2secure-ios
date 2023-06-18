@@ -103,8 +103,8 @@ inputs:
     - entitlements: 
       opts:
         title: "iOS Entitlement EnvVar/s"
-        description: "iOS Entitlement EnvVar/s (separated by space)"
-        is_required: true
+        description: "iOS Entitlement EnvVar/s (separated by space), required for Auto-Dev-Singing and On-Appdome Signing."
+        is_required: false
     
     - build_logs: "false"
       opts:
