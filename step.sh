@@ -51,6 +51,7 @@ download_files_from_url_list() {
 
 convert_env_var_to_url_list() {
 	fullpath=$1
+	fullpath=${fullpath/"|"/""}
 	n=$(echo $fullpath | grep -o "https:" | wc -l)
 	n=$((n+1))
 	url_list=""
