@@ -60,9 +60,16 @@ convert_env_var_to_url_list() {
 	done
 	echo $url_list
 }
+
 echo "This is test script"
+
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
+	exit 1
+fi
+
+if [[ -z $fusion_set_id ]]; then
+	echo 'No Fusion Set was provided. Exiting.'
 	exit 1
 fi
 
@@ -88,8 +95,11 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 # download provisioning profiles and set them in a list for later use
+echo BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
+echo pf: $pf
 pf_list=$(download_files_from_url_list $pf)
+echo pf_list: $pf_list
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
