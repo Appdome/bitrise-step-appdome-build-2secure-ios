@@ -38,7 +38,6 @@ download_files_from_url_list() {
 	for element in ${array[@]}
 	do
 		file=$(download_file $element)
-		cp $file $BITRISE_DEPLOY_DIR
 		if [ $i -eq 0 ]; then
  		file_list=$file
  		else
@@ -63,7 +62,6 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
-echo "This is test script"
 
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
@@ -97,11 +95,8 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 # download provisioning profiles and set them in a list for later use
-echo BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
-echo pf: $pf
 pf_list=$(download_files_from_url_list $pf)
-echo pf_list: $pf_list
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
@@ -146,20 +141,6 @@ case $sign_method in
 "On-Appdome")			echo "On Appdome Signing"
 						keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
 						keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
-						
-						
-						echo "./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output "
 						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
