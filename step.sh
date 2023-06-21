@@ -38,6 +38,7 @@ download_files_from_url_list() {
 	for element in ${array[@]}
 	do
 		file=$(download_file $element)
+		cp $file $BITRISE_DEPLOY_DIR
 		if [ $i -eq 0 ]; then
  		file_list=$file
  		else
