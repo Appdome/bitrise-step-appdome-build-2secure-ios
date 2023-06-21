@@ -57,6 +57,7 @@ convert_env_var_to_url_list() {
 	for ((i=2; i<=n; i++))
 	do 
 		url="https:"$(echo $fullpath | awk -v i=$i -F "https:" '{print $i}')
+  		echo "url: $url"
 		url_list="${url_list} ${url}"
 	done
 	echo $url_list
@@ -96,89 +97,8 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 # download provisioning profiles and set them in a list for later use
-echo BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL
+echo "BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL"
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
-echo pf: $pf
+echo "pf: $pf"
 pf_list=$(download_files_from_url_list $pf)
-echo pf_list: $pf_list
-
-ef=$(echo $entitlements)
-ef_list=$(download_files_from_url_list $ef)
-# ls -al
-en=""
-if [[ -n $entitlements ]]; then
-	en="--entitlements ${ef_list}"
-fi
-
-bl=""
-if [[ $build_logs == "true" ]]; then
-	bl="-bl"
-fi
-
-case $sign_method in
-"Private-Signing")		echo "Private Signing"						
-						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--private_signing \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
-							
-						;;
-"Auto-Dev-Signing")		echo "Auto Dev Signing"
-						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--auto_dev_private_signing \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
-							
-						;;
-"On-Appdome")			echo "On Appdome Signing"
-						keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
-						keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
-						
-						
-						echo "./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output "
-						
-						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
-							
-						;;
-esac
-
-if [[ $secured_app_output == *.sh ]]; then
-	echo $secured_app_output | envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH
-else
-	echo $secured_app_output | envman add --key APPDOME_SECURED_IPA_PATH
-fi
-echo $certificate_output | envman add --key APPDOME_CERTIFICATE_PATH
+echo "pf_list: $pf_list"
