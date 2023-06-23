@@ -108,8 +108,8 @@ inputs:
     
     - build_logs: "false"
       opts:
-        title: "Build with logs?"
-        description: "Build with diagnostic logs?"
+        title: "Build With Diagnostic Logs"
+        description: "Build the app with Appdome's Diagnostic Logs"
         value_options:
         - "true"
         - "false"
