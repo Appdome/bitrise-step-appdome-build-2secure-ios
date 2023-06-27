@@ -159,8 +159,9 @@ case $sign_method in
 esac
 
 if [[ $secured_app_output == *.sh ]]; then
-	echo $secured_app_output | envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH
+	envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH --value $secured_app_output
 else
-	echo $secured_app_output | envman add --key APPDOME_SECURED_IPA_PATH
+	envman add --key APPDOME_SECURED_IPA_PATH --value $secured_app_output
 fi
-echo $certificate_output | envman add --key APPDOME_CERTIFICATE_PATH
+envman add --key APPDOME_CERTIFICATE_PATH --value $certificate_output
+
