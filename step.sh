@@ -127,11 +127,12 @@ echo "iOS platform detected"
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
+echo "pf_list: ${pf_list}"
 
 if [[ -n $provisioning_profiles ]]; then
 	pf_list=$(create_provisioning_list)
 fi
-echo "pf_list: $pf_list"
+echo "pf_list: ${pf_list}"
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
