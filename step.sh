@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
@@ -95,8 +95,16 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 # download provisioning profiles and set them in a list for later use
+if [[ -n $provisioning_profiles ]]; then
+	echo $provisioning_profiles
+fi
+
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
+echo "BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL"
 pf_list=$(download_files_from_url_list $pf)
+echo "pf_list: $pf_list"
+
+
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
