@@ -97,7 +97,7 @@ inputs:
     - provisioning_profiles: 
       opts:
         title: "List of provisioning profile files (separated by comma) to be used"
-        description: "Which provisioning profile file name/s (separated by comma) to use. If not provided, all provisiong profiles uploaded to 'Code Signing & Files' section will be used."
+        description: "Which provisioning profile file name/s (separated by commas) to use. If not provided, all provisiong profiles uploaded to 'Code Signing & Files' section will be used."
         is_required: false
         
     - entitlements: 

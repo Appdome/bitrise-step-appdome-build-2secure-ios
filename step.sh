@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
@@ -62,6 +62,35 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
+create_provisioning_list() {
+	IFS=","
+	list=""
+	read -r -a prov_array <<< "$provisioning_profiles"
+	read -r -a files_array <<< "$pf_list"
+	IFS=""
+	for pro in ${prov_array[@]};
+	do
+		for file in ${files_array[@]};
+		do
+			extension="${file##*.}"
+			filename="${file%.*}"
+			if [[ $filename == $pro ]]; then
+				if [[ $list == "" ]]; then
+					list=$file
+				else
+					list="${list},${file}"
+				fi
+				break
+			fi
+		done
+		if [[ $list == "" ]]; then
+			echo "Could not find then given provisioning profiles among those uploaded to Code Signing & Files."
+			exit 1
+		fi
+	done
+	echo $provision_list
+}
+
 
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
@@ -95,15 +124,14 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 # download provisioning profiles and set them in a list for later use
-if [[ -n $provisioning_profiles ]]; then
-	echo $provisioning_profiles
-fi
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
-echo "BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL"
 pf_list=$(download_files_from_url_list $pf)
-echo "pf_list: $pf_list"
 
+if [[ -n $provisioning_profiles ]]; then
+	pf_list=$(create_provisioning_list)
+fi
+echo "pf_list: $pf_list"
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
