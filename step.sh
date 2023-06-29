@@ -63,9 +63,9 @@ convert_env_var_to_url_list() {
 }
 
 create_custom_provisioning_list() {
-	IFS=","
 	provision_list=""
 	prov_array=$@
+	IFS=","
 	read -r -a files_array <<< "$pf_list"
 	IFS=""
 	for prov in ${prov_array[@]};
@@ -86,7 +86,7 @@ create_custom_provisioning_list() {
 		done
 		if [[ $provision_list == "" ]]; then
 			echo "Could not find then given provisioning profiles among those uploaded to Code Signing & Files."
-			exit 1
+			exit 2
 		fi
 	done
 	echo $provision_list
@@ -128,12 +128,12 @@ echo "iOS platform detected"
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
-echo "pf_list: ${pf_list}"
+echo "1_pf_list: ${pf_list}"
 
 if [[ -n $provisioning_profiles ]]; then
 	pf_list=$(create_custom_provisioning_list $provisioning_profiles)
 fi
-echo "pf_list: ${pf_list}"
+echo "2_pf_list: ${pf_list}"
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
