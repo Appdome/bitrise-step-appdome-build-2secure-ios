@@ -62,28 +62,28 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
-create_provisioning_list() {
+create_custom_provisioning_list() {
 	IFS=","
-	list=""
+	provision_list=""
 	read -r -a prov_array <<< "$provisioning_profiles"
 	read -r -a files_array <<< "$pf_list"
 	IFS=""
-	for pro in ${prov_array[@]};
+	for prov in ${prov_array[@]};
 	do
 		for file in ${files_array[@]};
 		do
 			extension="${file##*.}"
 			filename="${file%.*}"
-			if [[ $filename == $pro ]]; then
-				if [[ $list == "" ]]; then
-					list=$file
+			if [[ $filename == $prov ]]; then
+				if [[ $provision_list == "" ]]; then
+					provision_list=$file
 				else
-					list="${list},${file}"
+					provision_list="${provision_list},${file}"
 				fi
 				break
 			fi
 		done
-		if [[ $list == "" ]]; then
+		if [[ $provision_list == "" ]]; then
 			echo "Could not find then given provisioning profiles among those uploaded to Code Signing & Files."
 			exit 1
 		fi
@@ -130,7 +130,7 @@ pf_list=$(download_files_from_url_list $pf)
 echo "pf_list: ${pf_list}"
 
 if [[ -n $provisioning_profiles ]]; then
-	pf_list=$(create_provisioning_list)
+	pf_list=$(create_custom_provisioning_list)
 fi
 echo "pf_list: ${pf_list}"
 
