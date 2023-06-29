@@ -64,6 +64,8 @@ convert_env_var_to_url_list() {
 
 create_custom_provisioning_list() {
 	BK=$IFS
+	count=0
+	pro_files=0
 	provision_list=""
 	prov_array=$@
 	IFS=","
@@ -71,11 +73,12 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
+		pro_files=$((pro_files+1))
 		for file in ${files_array[@]};
 		do
-			extension="${file##*.}"
 			filename="${file%.*}"
 			if [[ $filename == $prov ]]; then
+				count=$((count+1))
 				if [[ $provision_list == "" ]]; then
 					provision_list=$file
 				else
@@ -89,7 +92,11 @@ create_custom_provisioning_list() {
 			exit 1
 		fi
 	done
-	echo $provision_list
+	if [[ $count -ne $pro_files ]]; then
+		echo "Not all given provisioning files were found among those uploaded to Code Signing & Files. Please re-check your input."
+        exit 1
+    fi
+	# echo $provision_list
 }
 
 
@@ -128,12 +135,13 @@ echo "iOS platform detected"
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
-echo "1_pf_list: ${pf_list}"
 
 if [[ -n $provisioning_profiles ]]; then
-	pf_list=$(create_custom_provisioning_list $provisioning_profiles)
+	create_custom_provisioning_list $provisioning_profiles
+	pf_list=$provision_list
 fi
-echo "2_pf_list: ${pf_list}"
+
+echo "pf_list: ${pf_list}"
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
