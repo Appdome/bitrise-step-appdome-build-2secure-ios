@@ -94,7 +94,6 @@ create_custom_provisioning_list() {
 		echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
 		exit 1
     fi
-	# echo $provision_list
 }
 
 
@@ -135,11 +134,9 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
-	create_custom_provisioning_list $provisioning_profiles
+	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
 	pf_list=$provision_list
 fi
-
-echo "pf_list: ${pf_list}"
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
