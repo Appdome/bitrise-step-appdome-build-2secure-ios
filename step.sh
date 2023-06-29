@@ -105,7 +105,6 @@ pf_list=$(download_files_from_url_list $pf)
 echo "pf_list: $pf_list"
 
 
-
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
 # ls -al
