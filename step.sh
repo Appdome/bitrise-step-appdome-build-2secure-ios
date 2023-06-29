@@ -65,7 +65,8 @@ convert_env_var_to_url_list() {
 create_custom_provisioning_list() {
 	IFS=","
 	provision_list=""
-	read -r -a prov_array <<< "$provisioning_profiles"
+	# read -r -a prov_array <<< "$provisioning_profiles"
+	prov_array = $@
 	read -r -a files_array <<< "$pf_list"
 	IFS=""
 	for prov in ${prov_array[@]};
@@ -130,7 +131,7 @@ pf_list=$(download_files_from_url_list $pf)
 echo "pf_list: ${pf_list}"
 
 if [[ -n $provisioning_profiles ]]; then
-	pf_list=$(create_custom_provisioning_list)
+	pf_list=$(create_custom_provisioning_list $provisioning_profiles)
 fi
 echo "pf_list: ${pf_list}"
 
