@@ -85,8 +85,7 @@ create_custom_provisioning_list() {
 			fi
 		done
 		if [[ $provision_list == "" ]]; then
-			echo "Could not find then given provisioning profiles among those uploaded to Code Signing & Files."
-			exit 2
+			echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
 		fi
 	done
 	echo $provision_list
