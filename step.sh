@@ -64,8 +64,6 @@ convert_env_var_to_url_list() {
 
 create_custom_provisioning_list() {
 	BK=$IFS
-	count=0
-	pro_files=0
 	provision_list=""
 	prov_array=$@
 	IFS=","
@@ -73,12 +71,12 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
-		pro_files=$((pro_files+1))
+		found=false
 		for file in ${files_array[@]};
 		do
 			filename="${file%.*}"
 			if [[ $filename == $prov ]]; then
-				count=$((count+1))
+				found=true
 				if [[ $provision_list == "" ]]; then
 					provision_list=$file
 				else
@@ -87,14 +85,14 @@ create_custom_provisioning_list() {
 				break
 			fi
 		done
-		if [[ $provision_list == "" ]]; then
-			echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
-			exit 1
+		if [[ $found == false ]]; then
+			echo "Could not find the file ${prov} in Code Signing & Files. Please re-check your input."
+            exit 1
 		fi
 	done
-	if [[ $count -ne $pro_files ]]; then
-		echo "Not all given provisioning files were found among those uploaded to Code Signing & Files. Please re-check your input."
-        exit 1
+	if [[ $provision_list == "" ]]; then
+		echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
+		exit 1
     fi
 	# echo $provision_list
 }
