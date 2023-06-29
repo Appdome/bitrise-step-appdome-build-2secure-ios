@@ -69,6 +69,7 @@ create_custom_provisioning_list() {
 	read -r -a files_array <<< "$pf_list"
 	IFS=""
 	for prov in ${prov_array[@]};
+	echo "####### Looking for ${prov}...."
 	do
 		for file in ${files_array[@]};
 		do
