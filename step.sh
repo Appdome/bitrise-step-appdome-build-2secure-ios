@@ -65,8 +65,7 @@ convert_env_var_to_url_list() {
 create_custom_provisioning_list() {
 	IFS=","
 	provision_list=""
-	# read -r -a prov_array <<< "$provisioning_profiles"
-	prov_array = $@
+	prov_array=$@
 	read -r -a files_array <<< "$pf_list"
 	IFS=""
 	for prov in ${prov_array[@]};
