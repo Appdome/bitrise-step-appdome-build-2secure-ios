@@ -71,7 +71,6 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
-		echo "####### Looking for ${prov}...."
 		for file in ${files_array[@]};
 		do
 			extension="${file##*.}"
@@ -87,6 +86,7 @@ create_custom_provisioning_list() {
 		done
 		if [[ $provision_list == "" ]]; then
 			echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
+			exit 1
 		fi
 	done
 	echo $provision_list
