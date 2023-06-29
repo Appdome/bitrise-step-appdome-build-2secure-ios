@@ -63,11 +63,12 @@ convert_env_var_to_url_list() {
 }
 
 create_custom_provisioning_list() {
+	BK=$IFS
 	provision_list=""
 	prov_array=$@
 	IFS=","
 	read -r -a files_array <<< "$pf_list"
-	IFS=""
+	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
 		echo "####### Looking for ${prov}...."
