@@ -137,8 +137,9 @@ base_url="https://api.bitrise.io/v0.1"
 
 echo app_slug: $app_slug
 echo build_slug: $build_slug
+echo 1.0
 
-curl $base_url/apps/$app_slug
+curl $base_url/apps
 
 exit 0
 
