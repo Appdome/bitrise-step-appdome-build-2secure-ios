@@ -135,13 +135,9 @@ build_slug=$BITRISE_BUILD_SLUG
 bt_api_key="ut8pqJXiLR_28V9rVcpd2Ci8kpCJdBWQu4fcyGgcEEUtVE7udyV7fl06Bvy19VRcvwPCYzTpHBbk_HzFRrrabg"
 base_url="https://api.bitrise.io/v0.1"
 
-echo app_slug: $app_slug
-echo build_slug: $build_slug
-echo 1.0
+keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
 
-curl $base_url/apps
 
-exit 0
 
 # download provisioning profiles and set them in a list for later use
 
@@ -194,8 +190,20 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
-						keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
-						keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
+						if [[ -z $certificates ]]; then
+							BK=$IFS
+							IFS=" "
+							read -ra links <<< $BITRISE_CERTIFICATE_URL
+							read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+							link=${links[0]}
+							keystore_pass=${passwords[0]}
+							IFS=$BK
+							keystore_file=$(download_file $link)
+							
+
+
+						# keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
+						# keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
 						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
