@@ -62,6 +62,30 @@ convert_env_var_to_url_list() {
 	echo $url_list
 }
 
+get_custom_cert() {
+	BK=$IFS
+	files_list=""
+	cert=$1
+	IFS=","
+	read -ra files_array <<< "$cf_list"
+	IFS=$BK
+	found=false
+	file_index=0			
+	for file in ${files_array[@]};
+	do
+		filename="${file%.*}"
+		if [[ $filename == $cert ]]; then
+			found=true
+			break
+		fi
+		file_index=$((file_index+1))
+	done
+	if [[ $found == false ]]; then
+		echo "Could not find the file ${cert} in Code Signing & Files. Please re-check your input."
+		exit 1
+	fi
+}
+
 create_custom_provisioning_list() {
 	BK=$IFS
 	provision_list=""
@@ -135,9 +159,25 @@ build_slug=$BITRISE_BUILD_SLUG
 bt_api_key="ut8pqJXiLR_28V9rVcpd2Ci8kpCJdBWQu4fcyGgcEEUtVE7udyV7fl06Bvy19VRcvwPCYzTpHBbk_HzFRrrabg"
 base_url="https://api.bitrise.io/v0.1"
 
-keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
+# download certificate files and set them in a list for later use
 
-
+cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
+cf_list=$(download_files_from_url_list $cf)
+read -ra cert_links <<< $BITRISE_CERTIFICATE_URL
+read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+if [[ -z $certificates ]]; then
+	BK=$IFS
+	IFS=" "
+	cert_link=${cert_links[0]}
+	echo $cert_link
+	keystore_file=$(download_file $cert_link)
+	keystore_pass=${passwords[0]}
+	IFS=$BK
+else
+	get_custom_cert $certificate	# returns file_index
+	cert_link=${cert_links[$file_index]}
+	keystore_pass=${passwords[$file_index]}
+fi
 
 # download provisioning profiles and set them in a list for later use
 
@@ -145,8 +185,8 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
-	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
-	pf_list=$provision_list
+	create_custom_provisioning_list $provisioning_profiles	# returns files_list
+	pf_list=$files_list
 fi
 
 ef=$(echo $entitlements)
@@ -190,20 +230,6 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
-						
-						BK=$IFS
-						IFS=" "
-						read -ra links <<< $BITRISE_CERTIFICATE_URL
-						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
-						link=${links[0]}
-						echo $link
-						keystore_file=$(download_file $link)
-						keystore_pass=${passwords[0]}
-						IFS=$BK
-
-						
-						# keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
-						# keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
 						
 						echo --api_key $APPDOME_API_KEY \
 							--app $app_file \
