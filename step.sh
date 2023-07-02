@@ -73,8 +73,7 @@ get_custom_cert() {
 	file_index=0			
 	for file in ${files_array[@]};
 	do
-		filename="${file%.*}"
-		if [[ $filename == $cert ]]; then
+		if [[ $file == $cert ]]; then
 			found=true
 			break
 		fi
