@@ -132,7 +132,10 @@ echo "iOS platform detected"
 app_slug=$BITRISE_APP_URL
 build_slug=$BITRISE_BUILD_SLUG
 bt_api_key="ut8pqJXiLR_28V9rVcpd2Ci8kpCJdBWQu4fcyGgcEEUtVE7udyV7fl06Bvy19VRcvwPCYzTpHBbk_HzFRrrabg"
-base_url="https://api.bitrise.io/v0.1"
+base_url="https://api.bitrise.io/v0.1/me"
+
+echo app_slug: $app_slug
+echo build_slug: $build_slug
 
 curl -H 'Authorization: ' $bt_api_key $base_url/apps/$app_slug/build-certificates
 
