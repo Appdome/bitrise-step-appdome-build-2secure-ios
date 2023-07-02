@@ -216,6 +216,7 @@ case $sign_method in
 						read -ra keystore <<< "$cf_list"
 						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
+						echo Certificate: $certificate
 						if [[ -z $certificate ]]; then
 							keystore_file=${keystore[0]}
 							keystore_pass=${passwords[0]}
