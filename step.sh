@@ -154,7 +154,7 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 
-echo Certificate: $certificate
+echo Certificate: $certificate_file
 # download provisioning profiles and set them in a list for later use
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
@@ -213,12 +213,12 @@ case $sign_method in
 						read -ra keystore <<< "$cf_list"
 						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
-						echo Certificate: $certificate
-						if [[ -z $certificate ]]; then
+						echo Certificate: $certificate_file
+						if [[ -z $certificate_file ]]; then
 							keystore_file=${keystore[0]}
 							keystore_pass=${passwords[0]}
 						else
-							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
+							get_custom_cert $certificate_file	# returns $cert_file and file_index of $certificate in $cf_list
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
