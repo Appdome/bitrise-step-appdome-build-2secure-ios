@@ -190,18 +190,18 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
-						if [[ -z $certificates ]]; then
-							BK=$IFS
-							IFS=" "
-							read -ra links <<< $BITRISE_CERTIFICATE_URL
-							read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
-							link=${links[0]}
-							echo $link
-							keystore_file=$(download_file $link)
-							keystore_pass=${passwords[0]}
-							IFS=$BK
+						
+						BK=$IFS
+						IFS=" "
+						read -ra links <<< $BITRISE_CERTIFICATE_URL
+						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+						link=${links[0]}
+						echo $link
+						keystore_file=$(download_file $link)
+						keystore_pass=${passwords[0]}
+						IFS=$BK
 
-							exit 0
+						
 						# keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
 						# keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
 						
