@@ -94,10 +94,18 @@ inputs:
         - "Auto-Dev-Signing"
         is_required: true
         
+    - certificates: 
+      opts:
+        title: "Code signing cetificates (p.12) file name"
+        description: "Code signing cetificate file name (from the uploaded code signing certificates) to use. If not provided, the first certificate among the uploaded files to 'Code Signing & Files' section will be used.
+        If you don't know the file name of the certificate you want to use, download the certificate from the Code Signing & Files section to your computer and type here its file name as was downloaded.
+        Only ONE certificate file is supported."
+        is_required: false
+
     - provisioning_profiles: 
       opts:
-        title: "List of provisioning profile files (separated by spaces) to be used"
-        description: "Which provisioning profile file name/s from the uploaded provisioning profiles to use. If not provided, all provisioning profiles uploaded to 'Code Signing & Files' section will be used."
+        title: "Provisioning profile file name/s"
+        description: "List of provisioning profile file name/s (separated by spaces) from the uploaded provisioning profiles to use. If not provided, all provisioning profiles uploaded to 'Code Signing & Files' section will be used."
         is_required: false
         
     - entitlements: 
