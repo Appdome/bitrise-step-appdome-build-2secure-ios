@@ -208,6 +208,7 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
+						ecgo Certificate: $certificate
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
 						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
