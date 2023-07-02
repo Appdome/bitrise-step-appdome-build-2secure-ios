@@ -71,9 +71,9 @@ get_custom_cert() {
 	IFS=$BK
 	found=false
 	file_index=0			
-	for file in ${files_array[@]};
+	for cert_file in ${files_array[@]};
 	do
-		if [[ $file == $cert ]]; then
+		if [[ $cert_file == $cert ]]; then
 			found=true
 			break
 		fi
@@ -218,8 +218,9 @@ case $sign_method in
 							keystore_pass=${passwords[0]}
 							IFS=$BK
 						else
-							get_custom_cert $certificate	# returns file_index of $certificate in $cf_list
+							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
 							echo Index: $file_index
+							echo CF_list: $cf_list
 							keystore_file=${cf_list[file_index]}
 							keystore_pass=${passwords[file_index]}
 						fi
