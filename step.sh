@@ -154,10 +154,7 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 
-# download certificate files and set them in a list for later use
-
-
-
+echo Certificate: $certificate
 # download provisioning profiles and set them in a list for later use
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
