@@ -128,6 +128,8 @@ git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
 
 echo "iOS platform detected"
+
+echo "BITRISE_CERTIFICATE_URL: $BITRISE_CERTIFICATE_URL"
 # download provisioning profiles and set them in a list for later use
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
