@@ -38,7 +38,6 @@ download_files_from_url_list() {
 	for element in ${array[@]}
 	do
 		file=$(download_file $element)
-		cp $file $BITRISE_DEPLOY_DIR
 		if [ $i -eq 0 ]; then
  		file_list=$file
  		else
@@ -51,19 +50,77 @@ download_files_from_url_list() {
 
 convert_env_var_to_url_list() {
 	fullpath=$1
+	fullpath=${fullpath//"|"/" "}
 	n=$(echo $fullpath | grep -o "https:" | wc -l)
 	n=$((n+1))
 	url_list=""
 	for ((i=2; i<=n; i++))
 	do 
 		url="https:"$(echo $fullpath | awk -v i=$i -F "https:" '{print $i}')
-  		echo "url: $url"
 		url_list="${url_list} ${url}"
 	done
 	echo $url_list
 }
 
-echo "This is test script"
+get_custom_cert() {
+	BK=$IFS
+	files_list=""
+	cert=$1
+	IFS=","
+	read -ra files_array <<< "$cf_list"
+	IFS=$BK
+	found=false
+	file_index=0			
+	for cert_file in ${files_array[@]};
+	do
+		echo Comparing $cert_file to $cert
+		if [[ $cert_file == $cert ]]; then
+			found=true
+			echo Fount match !!!!!!!!!!!!!
+			break
+		fi
+		file_index=$((file_index+1))
+	done
+	if [[ $found == false ]]; then
+		echo "Could not find the file ${cert} in Code Signing & Files. Please re-check your input."
+		exit 1
+	fi
+}
+
+create_custom_provisioning_list() {
+	BK=$IFS
+	provision_list=""
+	prov_array=$@
+	IFS=","
+	read -r -a files_array <<< "$pf_list"
+	IFS=$BK
+	for prov in ${prov_array[@]};
+	do
+		found=false
+		for file in ${files_array[@]};
+		do
+			filename="${file%.*}"
+			if [[ $filename == $prov ]]; then
+				found=true
+				if [[ $provision_list == "" ]]; then
+					provision_list=$file
+				else
+					provision_list="${provision_list},${file}"
+				fi
+				break
+			fi
+		done
+		if [[ $found == false ]]; then
+			echo "Could not find the file ${prov} in Code Signing & Files. Please re-check your input."
+            exit 1
+		fi
+	done
+	if [[ $provision_list == "" ]]; then
+		echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
+		exit 1
+    fi
+}
+
 
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
@@ -96,9 +153,109 @@ git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
 
 echo "iOS platform detected"
+
+echo Certificate: $certificate
 # download provisioning profiles and set them in a list for later use
-echo "BITRISE_PROVISION_URL: $BITRISE_PROVISION_URL"
+
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
-echo "pf: $pf"
 pf_list=$(download_files_from_url_list $pf)
-echo "pf_list: $pf_list"
+
+if [[ -n $provisioning_profiles ]]; then
+	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
+	pf_list=$provision_list
+fi
+
+ef=$(echo $entitlements)
+ef_list=$(download_files_from_url_list $ef)
+# ls -al
+en=""
+if [[ -n $entitlements ]]; then
+	en="--entitlements ${ef_list}"
+fi
+
+bl=""
+if [[ $build_logs == "true" ]]; then
+	bl="-bl"
+fi
+
+case $sign_method in
+"Private-Signing")		echo "Private Signing"						
+						./appdome_api.sh --api_key $APPDOME_API_KEY \
+							--app $app_file \
+							--fusion_set_id $fusion_set_id \
+							$tm \
+							--private_signing \
+							--provisioning_profiles $pf_list \
+							$en \
+							$bl \
+							--output $secured_app_output \
+							--certificate_output $certificate_output 
+							
+						;;
+"Auto-Dev-Signing")		echo "Auto Dev Signing"
+						./appdome_api.sh --api_key $APPDOME_API_KEY \
+							--app $app_file \
+							--fusion_set_id $fusion_set_id \
+							$tm \
+							--auto_dev_private_signing \
+							--provisioning_profiles $pf_list \
+							$en \
+							$bl \
+							--output $secured_app_output \
+							--certificate_output $certificate_output 
+							
+						;;
+"On-Appdome")			echo "On Appdome Signing"
+						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
+						cf_list=$(download_files_from_url_list $cf)
+						BK=$IFS
+						IFS=","
+						read -ra keystore <<< "$cf_list"
+						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
+						IFS=$BK
+						echo Certificate: $certificate
+						if [[ -z $certificate ]]; then
+							keystore_file=${keystore[0]}
+							keystore_pass=${passwords[0]}
+						else
+							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
+							keystore_file=$cert_file
+							keystore_pass=${passwords[file_index]}
+						fi
+
+						echo --api_key $APPDOME_API_KEY \
+							--app $app_file \
+							--fusion_set_id $fusion_set_id \
+							$tm \
+							--sign_on_appdome \
+							--keystore $keystore_file \
+							--keystore_pass $keystore_pass \
+							--provisioning_profiles $pf_list \
+							$en \
+							$bl \
+							--output $secured_app_output \
+							--certificate_output $certificate_output 
+
+						# ./appdome_api.sh --api_key $APPDOME_API_KEY \
+						# 	--app $app_file \
+						# 	--fusion_set_id $fusion_set_id \
+						# 	$tm \
+						# 	--sign_on_appdome \
+						# 	--keystore $keystore_file \
+						# 	--keystore_pass $keystore_pass \
+						# 	--provisioning_profiles $pf_list \
+						# 	$en \
+						# 	$bl \
+						# 	--output $secured_app_output \
+						# 	--certificate_output $certificate_output 
+							
+						;;
+esac
+
+if [[ $secured_app_output == *.sh ]]; then
+	envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH --value $secured_app_output
+else
+	envman add --key APPDOME_SECURED_IPA_PATH --value $secured_app_output
+fi
+envman add --key APPDOME_CERTIFICATE_PATH --value $certificate_output
+
