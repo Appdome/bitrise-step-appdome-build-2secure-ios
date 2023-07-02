@@ -94,7 +94,7 @@ inputs:
         - "Auto-Dev-Signing"
         is_required: true
         
-    - certificate: 
+    - certificate_file: 
       opts:
         title: "Code signing cetificates (p.12) file name"
         description: "Code signing cetificate file name (from the uploaded code signing certificates) to use. If not provided, the LAST certificate among the uploaded files to 'Code Signing & Files' section will be used.
