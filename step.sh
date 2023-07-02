@@ -210,13 +210,13 @@ case $sign_method in
 						echo Certificate: $certificate
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
+						BK=$IFS
+						IFS=" "
 						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+						IFS=$BK
 						if [[ -z $certificate ]]; then
-							BK=$IFS
-							IFS=" "
 							keystore_file=${cf_list[0]}
 							keystore_pass=${passwords[0]}
-							IFS=$BK
 						else
 							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
 							echo Index: $file_index
