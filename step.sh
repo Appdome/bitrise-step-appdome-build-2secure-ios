@@ -211,11 +211,12 @@ case $sign_method in
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
 						BK=$IFS
-						IFS=" "
-						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+						IFS=","
+						read -ra keystore <<< "$cf_list"
+						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
 						if [[ -z $certificate ]]; then
-							keystore_file=${cf_list[0]}
+							keystore_file=${keystore[0]}
 							keystore_pass=${passwords[0]}
 						else
 							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
