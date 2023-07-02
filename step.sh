@@ -207,11 +207,11 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
-						echo Certificate: $certificate
+						echo BITRISE_CERTIFICATE_PASSPHRASE: $BITRISE_CERTIFICATE_PASSPHRASE
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
 						BK=$IFS
-						IFS=","
+						IFS=" "
 						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
 						IFS=$BK
 						if [[ -z $certificate ]]; then
