@@ -220,8 +220,8 @@ case $sign_method in
 						else
 							get_custom_cert $certificate	# returns file_index of $certificate in $cf_list
 							echo Index: $file_index
-							keystore_file=${cf_list[$file_index]}
-							keystore_pass=${passwords[$file_index]}
+							keystore_file=${cf_list[file_index]}
+							keystore_pass=${passwords[file_index]}
 						fi
 
 						echo --api_key $APPDOME_API_KEY \
