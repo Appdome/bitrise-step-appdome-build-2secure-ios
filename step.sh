@@ -73,8 +73,10 @@ get_custom_cert() {
 	file_index=0			
 	for cert_file in ${files_array[@]};
 	do
+		echo Comparing $cert_file to $cert
 		if [[ $cert_file == $cert ]]; then
 			found=true
+			echo Fount match !!!!!!!!!!!!!
 			break
 		fi
 		file_index=$((file_index+1))
