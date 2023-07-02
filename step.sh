@@ -230,8 +230,7 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
-						
-						echo --api_key $APPDOME_API_KEY \
+						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
@@ -243,21 +242,6 @@ case $sign_method in
 							$bl \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
-
-
-
-						# ./appdome_api.sh --api_key $APPDOME_API_KEY \
-						# 	--app $app_file \
-						# 	--fusion_set_id $fusion_set_id \
-						# 	$tm \
-						# 	--sign_on_appdome \
-						# 	--keystore $keystore_file \
-						# 	--keystore_pass $keystore_pass \
-						# 	--provisioning_profiles $pf_list \
-						# 	$en \
-						# 	$bl \
-						# 	--output $secured_app_output \
-						# 	--certificate_output $certificate_output 
 							
 						;;
 esac
