@@ -223,7 +223,7 @@ case $sign_method in
 							keystore_pass=${passwords[$file_index]}
 						fi
 
-						./echo --api_key $APPDOME_API_KEY \
+						echo --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
