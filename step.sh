@@ -221,7 +221,7 @@ case $sign_method in
 							get_custom_cert $certificate	# returns $cert_file and file_index of $certificate in $cf_list
 							echo Index: $file_index
 							echo CF_list: $cf_list
-							keystore_file=${cf_list[file_index]}
+							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
 
