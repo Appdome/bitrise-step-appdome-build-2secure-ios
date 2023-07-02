@@ -129,7 +129,15 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 
-echo "BITRISE_CERTIFICATE_URL: $BITRISE_CERTIFICATE_URL"
+app_slug=$BITRISE_APP_URL
+build_slug=$BITRISE_BUILD_SLUG
+bt_api_key="ut8pqJXiLR_28V9rVcpd2Ci8kpCJdBWQu4fcyGgcEEUtVE7udyV7fl06Bvy19VRcvwPCYzTpHBbk_HzFRrrabg"
+base_url="https://api.bitrise.io/v0.1"
+
+curl -H 'Authorization: ' $bt_api_key $base_url/apps/$app_slug/build-certificates
+
+exit 0
+
 # download provisioning profiles and set them in a list for later use
 
 pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
