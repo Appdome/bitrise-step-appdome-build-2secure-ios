@@ -153,31 +153,9 @@ cd appdome-api-bash
 
 echo "iOS platform detected"
 
-app_slug=$BITRISE_APP_URL
-app_slug="1ae96b85-0026-4448-9d68-10f01a6b0344"
-build_slug=$BITRISE_BUILD_SLUG
-bt_api_key="ut8pqJXiLR_28V9rVcpd2Ci8kpCJdBWQu4fcyGgcEEUtVE7udyV7fl06Bvy19VRcvwPCYzTpHBbk_HzFRrrabg"
-base_url="https://api.bitrise.io/v0.1"
-
 # download certificate files and set them in a list for later use
 
-cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
-cf_list=$(download_files_from_url_list $cf)
-read -ra cert_links <<< $BITRISE_CERTIFICATE_URL
-read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
-if [[ -z $certificates ]]; then
-	BK=$IFS
-	IFS=" "
-	cert_link=${cert_links[0]}
-	echo $cert_link
-	keystore_file=$(download_file $cert_link)
-	keystore_pass=${passwords[0]}
-	IFS=$BK
-else
-	get_custom_cert $certificate	# returns file_index
-	cert_link=${cert_links[$file_index]}
-	keystore_pass=${passwords[$file_index]}
-fi
+
 
 # download provisioning profiles and set them in a list for later use
 
@@ -185,8 +163,8 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
-	create_custom_provisioning_list $provisioning_profiles	# returns files_list
-	pf_list=$files_list
+	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
+	pf_list=$provision_list
 fi
 
 ef=$(echo $entitlements)
@@ -230,6 +208,21 @@ case $sign_method in
 							
 						;;
 "On-Appdome")			echo "On Appdome Signing"
+						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
+						cf_list=$(download_files_from_url_list $cf)
+						read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
+						if [[ -z $certificate ]]; then
+							BK=$IFS
+							IFS=" "
+							keystore_file=${cf_list[0]}
+							keystore_pass=${passwords[0]}
+							IFS=$BK
+						else
+							get_custom_cert $certificate	# returns file_index of $certificate in $cf_list
+							keystore_file=${cf_list[file_index]}
+							keystore_pass=${passwords[$file_index]}
+						fi
+
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
