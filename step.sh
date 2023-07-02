@@ -196,12 +196,12 @@ case $sign_method in
 							read -ra links <<< $BITRISE_CERTIFICATE_URL
 							read -ra passwords <<< $BITRISE_CERTIFICATE_PASSPHRASE
 							link=${links[0]}
+							echo $link
+							keystore_file=$(download_file $link)
 							keystore_pass=${passwords[0]}
 							IFS=$BK
-							keystore_file=$(download_file $link)
-							
 
-
+							exit 0
 						# keystore_file=$(download_file $BITRISE_CERTIFICATE_URL)
 						# keystore_pass=$BITRISE_CERTIFICATE_PASSPHRASE
 						
