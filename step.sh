@@ -28,7 +28,12 @@ download_file() {
 	file_location=$1
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
-	curl -L $file_location --output $downloaded_file && echo $downloaded_file
+	curl -L $file_location --output $downloaded_file 
+	BK=$IFS
+	IFS=""
+	new_name=${downloaded_file//" "/"_"}
+	IFS=$BK
+	mv $downloaded_file $new_name && echo $new_name
 }
 
 download_files_from_url_list() {
@@ -212,18 +217,19 @@ case $sign_method in
 						IFS="|"
 						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
-						echo Certificate: $certificate_file
 						if [[ -z $certificate_file ]]; then
 							keystore_file=${keystore[0]}
 							keystore_pass=${passwords[0]}
 						else
+							BK=$IFS
+							IFS=""
+							certificate_file=${certificate_file//" "/"_"}
+							IFS=$BK
 							get_custom_cert $certificate_file	# returns $cert_file and file_index of $certificate in $cf_list
 							echo "File index: $file_index"
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
-						echo "This is a temp file:" > $BITRISE_DEPLOY_DIR/pass.txt
-						echo $BITRISE_CERTIFICATE_PASSPHRASE >> $BITRISE_DEPLOY_DIR/pass.txt
 						echo --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
@@ -237,18 +243,18 @@ case $sign_method in
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 
-						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
+						# ./appdome_api.sh --api_key $APPDOME_API_KEY \
+						# 	--app $app_file \
+						# 	--fusion_set_id $fusion_set_id \
+						# 	$tm \
+						# 	--sign_on_appdome \
+						# 	--keystore $keystore_file \
+						# 	--keystore_pass $keystore_pass \
+						# 	--provisioning_profiles $pf_list \
+						# 	$en \
+						# 	$bl \
+						# 	--output $secured_app_output \
+						# 	--certificate_output $certificate_output 
 							
 						;;
 esac
