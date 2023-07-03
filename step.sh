@@ -31,7 +31,7 @@ download_file() {
 	curl -L $file_location --output $downloaded_file 
 	BK=$IFS
 	IFS=""
-	new_name=${downloaded_file//" "/"_"}
+	new_name=${downloaded_file//"%20"/"_"}
 	IFS=$BK
 	mv $downloaded_file $new_name && echo $new_name
 }
