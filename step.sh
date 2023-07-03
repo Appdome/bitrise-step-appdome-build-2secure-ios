@@ -96,13 +96,6 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
-		echo "Prov1: $prov"
-		prov=$(echo $prov | sed -e 's/ *$//g')
-		echo "Prov2: $prov"
-		IFS=""
-		prov=${prov//" "/"_"}
-		IFS=$BK
-		echo "Prov3: $prov"
 		found=false
 		for file in ${files_array[@]};
 		do
@@ -170,6 +163,7 @@ pf_list=$(download_files_from_url_list $pf)
 if [[ -n $provisioning_profiles ]]; then
 	BK=$IFS
 	IFS=""
+	provisioning_profiles=$(echo $provisioning_profiles | sed -e 's/ *$//g')
 	provisioning_profiles=${provisioning_profiles//", "/","}
 	provisioning_profiles=${provisioning_profiles//" ,"/","}
 	provisioning_profiles=${provisioning_profiles//" "/"_"}
