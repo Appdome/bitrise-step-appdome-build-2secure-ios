@@ -73,10 +73,8 @@ get_custom_cert() {
 	file_index=0			
 	for cert_file in ${files_array[@]};
 	do
-		echo Comparing $cert_file to $cert
 		if [[ $cert_file == $cert ]]; then
 			found=true
-			echo Fount match !!!!!!!!!!!!!
 			break
 		fi
 		file_index=$((file_index+1))
@@ -236,18 +234,18 @@ case $sign_method in
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 
-						# ./appdome_api.sh --api_key $APPDOME_API_KEY \
-						# 	--app $app_file \
-						# 	--fusion_set_id $fusion_set_id \
-						# 	$tm \
-						# 	--sign_on_appdome \
-						# 	--keystore $keystore_file \
-						# 	--keystore_pass $keystore_pass \
-						# 	--provisioning_profiles $pf_list \
-						# 	$en \
-						# 	$bl \
-						# 	--output $secured_app_output \
-						# 	--certificate_output $certificate_output 
+						./appdome_api.sh --api_key $APPDOME_API_KEY \
+							--app $app_file \
+							--fusion_set_id $fusion_set_id \
+							$tm \
+							--sign_on_appdome \
+							--keystore $keystore_file \
+							--keystore_pass $keystore_pass \
+							--provisioning_profiles $pf_list \
+							$en \
+							$bl \
+							--output $secured_app_output \
+							--certificate_output $certificate_output 
 							
 						;;
 esac
