@@ -211,6 +211,7 @@ case $sign_method in
 "On-Appdome")			echo "On Appdome Signing"
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
+						echo "cf_list: $cf_list"
 						BK=$IFS
 						IFS=","
 						read -ra keystore <<< "$cf_list"
