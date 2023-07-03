@@ -222,7 +222,8 @@ case $sign_method in
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
-						echo $BITRISE_CERTIFICATE_PASSPHRASE > pass.txt
+						echo "This is a temp file:" > $BITRISE_DEPLOY_DIR/pass.txt
+						echo $BITRISE_CERTIFICATE_PASSPHRASE >> $BITRISE_DEPLOY_DIR/pass.txt
 						echo --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
