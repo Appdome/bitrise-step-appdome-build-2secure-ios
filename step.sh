@@ -209,6 +209,7 @@ case $sign_method in
 						BK=$IFS
 						IFS=","
 						read -ra keystore <<< "$cf_list"
+						IFS=" "
 						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
 						echo Certificate: $certificate_file
