@@ -163,7 +163,9 @@ pf_list=$(download_files_from_url_list $pf)
 if [[ -n $provisioning_profiles ]]; then
 	BK=$IFS
 	IFS=""
+	echo "PR1: $provisioning_profiles"
 	provisioning_profiles=$(echo $provisioning_profiles | sed -e 's/ *$//g')
+	echo "PR2: $provisioning_profiles"
 	provisioning_profiles=${provisioning_profiles//", "/","}
 	provisioning_profiles=${provisioning_profiles//" ,"/","}
 	provisioning_profiles=${provisioning_profiles//" "/"_"}
