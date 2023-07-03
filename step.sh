@@ -29,10 +29,7 @@ download_file() {
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
 	curl -L $file_location --output $downloaded_file 
-	BK=$IFS
-	IFS=""
 	new_name=${downloaded_file//"%20"/"_"}
-	IFS=$BK
 	mv $downloaded_file $new_name && echo $new_name
 }
 
@@ -92,9 +89,9 @@ get_custom_cert() {
 
 create_custom_provisioning_list() {
 	BK=$IFS
+	IFS=","
 	provision_list=""
 	prov_array=$@
-	IFS=","
 	read -r -a files_array <<< "$pf_list"
 	IFS=$BK
 	for prov in ${prov_array[@]};
@@ -164,6 +161,10 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
+	BK=$IFS
+	IFS=""
+	provisioning_profiles=${provisioning_profiles//" "/"_"}
+	IFS=$BK
 	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
 	pf_list=$provision_list
 fi
