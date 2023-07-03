@@ -96,6 +96,10 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
+		prov=$(echo $prov | sed -e 's/ *$//g')
+		IFS=""
+		prov=${prov//" "/"_"}
+		IFS=$BK
 		found=false
 		for file in ${files_array[@]};
 		do
@@ -161,10 +165,12 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
-	BK=$IFS
-	IFS=""
-	provisioning_profiles=${provisioning_profiles//" "/"_"}
-	IFS=$BK
+	# BK=$IFS
+	# IFS=","
+	# provisioning_profiles=$(echo $provisioning_profiles | sed -e 's/^[[:space:]]*//')
+	# IFS=""
+	# provisioning_profiles=${provisioning_profiles//" "/"_"}
+	# IFS=$BK
 	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
 	pf_list=$provision_list
 fi
