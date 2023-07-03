@@ -217,6 +217,7 @@ case $sign_method in
 							keystore_pass=${passwords[0]}
 						else
 							get_custom_cert $certificate_file	# returns $cert_file and file_index of $certificate in $cf_list
+							echo "File index: $file_index"
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
@@ -234,18 +235,18 @@ case $sign_method in
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 
-						./appdome_api.sh --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
+						# ./appdome_api.sh --api_key $APPDOME_API_KEY \
+						# 	--app $app_file \
+						# 	--fusion_set_id $fusion_set_id \
+						# 	$tm \
+						# 	--sign_on_appdome \
+						# 	--keystore $keystore_file \
+						# 	--keystore_pass $keystore_pass \
+						# 	--provisioning_profiles $pf_list \
+						# 	$en \
+						# 	$bl \
+						# 	--output $secured_app_output \
+						# 	--certificate_output $certificate_output 
 							
 						;;
 esac
