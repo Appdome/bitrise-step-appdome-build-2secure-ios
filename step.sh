@@ -23,6 +23,21 @@ set -e
 
 # This is step.sh file for iOS apps
 
+print_all_params() {
+	echo "Appdome Build-2Secure parameters:"
+	echo "App location: $app_location"
+	echo "Appdome API key: $APPDOME_API_KEY"
+	echo "Fusion set ID: $fusion_set_id"
+	echo "Team ID: $team_id"
+	echo "Sign Method: $sign_method"
+	echo "Certificate file: $keystore_file" 
+	echo "Certificate password: $keystore_pass"
+	echo "Provisioning profiles: $pf_list" 
+	echo "Entitelments: $ef_list"
+	echo "Build with test: $build_logs" 
+	echo "Secured app output: $secured_app_output"
+	echo "-----------------------------------------"
+}
 
 download_file() {
 	file_location=$1
@@ -185,7 +200,9 @@ if [[ $build_logs == "true" ]]; then
 fi
 
 case $sign_method in
-"Private-Signing")		echo "Private Signing"						
+"Private-Signing")		
+						print_all_params
+						echo "Private Signing"						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
@@ -194,11 +211,13 @@ case $sign_method in
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
-							--output $secured_app_output \
+							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
 						;;
-"Auto-Dev-Signing")		echo "Auto Dev Signing"
+"Auto-Dev-Signing")		
+						print_all_params
+						echo "Auto Dev Signing"
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
@@ -207,11 +226,11 @@ case $sign_method in
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
-							--output $secured_app_output \
+							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
 						;;
-"On-Appdome")			echo "On Appdome Signing"
+"On-Appdome")			
 						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
 						cf_list=$(download_files_from_url_list $cf)
 						BK=$IFS
@@ -232,26 +251,15 @@ case $sign_method in
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
-						echo --api_key $APPDOME_API_KEY \
-							--app $app_file \
-							--fusion_set_id $fusion_set_id \
-							$tm \
-							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
-							--provisioning_profiles $pf_list \
-							$en \
-							$bl \
-							--output $secured_app_output \
-							--certificate_output $certificate_output 
-
+						print_all_params
+						echo "On Appdome Signing"
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
 							--sign_on_appdome \
-							--keystore $keystore_file \
-							--keystore_pass $keystore_pass \
+							--keystore "$keystore_file" \
+							--keystore_pass "$keystore_pass" \
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
