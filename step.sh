@@ -31,7 +31,6 @@ print_all_params() {
 	echo "Team ID: $team_id"
 	echo "Sign Method: $sign_method"
 	echo "Certificate file: $keystore_file" 
-	echo "Certificate password: $keystore_pass"
 	echo "Provisioning profiles: $pf_list" 
 	echo "Entitelments: $ef_list"
 	echo "Build with test: $build_logs" 
