@@ -140,7 +140,6 @@ create_custom_provisioning_list() {
 echo "Internal version: i-1.0.14"
 
 args="$@"
-args=${args//"_@_"/""}
 i=1
 for arg in ${args[@]}
 do
@@ -157,6 +156,18 @@ certificate_file=${args[5]}
 provisioning_profiles=${args[6]}
 entitlements=${args[7]}
 build_logs=${args[8]}
+
+if [[ $certificate_file == "_@_" ]]; then
+	certificate_file=""
+fi
+
+if [[ $provisioning_profiles == "_@_" ]]; then
+	provisioning_profiles=""
+fi
+
+if [[ $entitlements == "_@_" ]]; then
+	entitlements=""
+fi
 
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
