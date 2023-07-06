@@ -33,7 +33,8 @@ print_all_params() {
 	echo "Certificate file: $keystore_file" 
 	echo "Provisioning profiles: $pf_list" 
 	echo "Entitelments: $ef_list"
-	echo "Build with test: $build_logs" 
+	echo "Build with logs: $build_logs" 
+	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
 	echo "-----------------------------------------"
 }
@@ -156,6 +157,8 @@ certificate_file=${args[5]}
 provisioning_profiles=${args[6]}
 entitlements=${args[7]}
 build_logs=${args[8]}
+build_to_test=${args[9]}
+build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
 if [[ $certificate_file == "_@_" ]]; then
 	certificate_file=""
@@ -231,6 +234,12 @@ if [[ $build_logs == "true" ]]; then
 	bl="-bl"
 fi
 
+
+btv=""
+if [[ $build_to_test != "none" ]]; then
+	btv="--build_to_test_vendor  $build_to_test"
+fi
+
 case $sign_method in
 "Private-Signing")		
 						print_all_params
@@ -243,6 +252,7 @@ case $sign_method in
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
+							$btv \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -258,6 +268,7 @@ case $sign_method in
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
+							$btv \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -295,6 +306,7 @@ case $sign_method in
 							--provisioning_profiles $pf_list \
 							$en \
 							$bl \
+							$btv \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
