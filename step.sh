@@ -226,6 +226,7 @@ ef_list=$(download_files_from_url_list $ef)
 # ls -al
 en=""
 if [[ -n $entitlements ]]; then
+	entitlements=${entitlements//"_@_"," "}
 	en="--entitlements ${ef_list}"
 fi
 
