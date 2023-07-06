@@ -115,6 +115,7 @@ create_custom_provisioning_list() {
 		for file in ${files_array[@]};
 		do
 			filename="${file%.*}"
+			echo comparing to: $filename
 			if [[ $filename == $prov ]]; then
 				found=true
 				if [[ $provision_list == "" ]]; then
