@@ -63,6 +63,9 @@ fi
 
 if [[ -z $entitlements ]];then
     entitlements="_@_"
+else
+    entitlements=$(echo $entitlements | xargs)
+    entitlements=${entitlements//" "/"_@_"}
 fi
 
 # step execusion
