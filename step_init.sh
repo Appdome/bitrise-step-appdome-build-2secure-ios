@@ -47,17 +47,29 @@ fi
 
 if [[ -z $certificate_file ]];then
     certificate_file="_@_"
+else
+    BK=$IFS
+	IFS=""
+	provisioning_profiles=$(echo $provisioning_profiles | xargs)
+	provisioning_profiles=${provisioning_profiles//", "/","}
+	provisioning_profiles=${provisioning_profiles//" ,"/","}
+	provisioning_profiles=${provisioning_profiles//" "/"_"}
+	IFS=$BK
 fi
-
+    
 if [[ -z $provisioning_profiles ]];then
     provisioning_profiles="_@_"
 fi
 
 if [[ -z $entitlements ]];then
     entitlements="_@_"
+else
+    entitlements=$(echo $entitlements | xargs)
+    entitlements=${entitlements//" "/"_@_"}
 fi
 
 # step execusion
-git clone https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
+git clone --branch Dev-1.0.14 https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git # > /dev/null
 cd bitrise-step-appdome-build-2secure-ios
-exec ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs"
+bash ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test"
+exit $(echo $?)
