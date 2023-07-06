@@ -47,6 +47,14 @@ fi
 
 if [[ -z $certificate_file ]];then
     certificate_file="_@_"
+else
+    BK=$IFS
+	IFS=""
+	provisioning_profiles=$(echo $provisioning_profiles | xargs)
+	provisioning_profiles=${provisioning_profiles//", "/","}
+	provisioning_profiles=${provisioning_profiles//" ,"/","}
+	provisioning_profiles=${provisioning_profiles//" "/"_"}
+	IFS=$BK
 fi
     
 if [[ -z $provisioning_profiles ]];then
