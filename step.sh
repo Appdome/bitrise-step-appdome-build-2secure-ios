@@ -113,12 +113,10 @@ create_custom_provisioning_list() {
 	IFS=$BK
 	for prov in ${prov_array[@]};
 	do
-		echo checking.... $prov
 		found=false
 		for file in ${files_array[@]};
 		do
 			filename="${file%.*}"
-			echo comparing to: $filename
 			if [[ $filename == $prov ]]; then
 				found=true
 				if [[ $provision_list == "" ]]; then
