@@ -37,7 +37,7 @@ print_all_params() {
 	echo "Build with logs: $build_logs" 
 	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
-	echo "Certificate output (.pdf): $certificate_output"
+	echo "Certificate output: $certificate_output"
 	echo "-----------------------------------------"
 }
 
