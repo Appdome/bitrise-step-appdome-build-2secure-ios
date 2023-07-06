@@ -47,10 +47,14 @@ fi
 
 if [[ -z $certificate_file ]];then
     certificate_file="_@_"
+else
+    certificate_file=${certificate_file//" "/"%20"}
 fi
 
 if [[ -z $provisioning_profiles ]];then
     provisioning_profiles="_@_"
+else
+    provisioning_profiles=${provisioning_profiles//" "/"%20"}
 fi
 
 if [[ -z $entitlements ]];then
