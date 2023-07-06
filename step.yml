@@ -64,7 +64,7 @@ deps:
 
 toolkit:
   bash:
-    entry_file: step.sh
+    entry_file: step_init.sh
 
 
 inputs:
