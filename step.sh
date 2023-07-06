@@ -171,7 +171,7 @@ fi
 if [[ $entitlements == "_@_" ]]; then
 	entitlements=""
 else
-	entitlements=${entitlements//"_@_"," "}
+	entitlements=${entitlements//"_@_"/" "}
 	echo DEBUG: entitlements: $entitlements
 fi
 
