@@ -144,6 +144,7 @@ i=1
 for arg in ${args[@]}
 do
 	args[i]=$arg
+	echo DEBUG: ${args[i]}
    	i=$((i+1))
 done
 
