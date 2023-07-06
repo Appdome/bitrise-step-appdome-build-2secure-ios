@@ -21,7 +21,7 @@ set -e
 #  with a 0 exit code `bitrise` will register your Step as "successful".
 # Any non zero exit code will be registered as "failed" by `bitrise`.
 
-# This is step.sh file for iOS apps
+# This is step_init.sh file for iOS apps
 
 print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
@@ -175,6 +175,9 @@ fi
 
 if [[ $team_id == "_@_" ]]; then
 	team_id=""
+	tm=""
+else
+	tm="--team_id ${team_id}"
 fi
 
 if [[ -z $APPDOME_API_KEY ]]; then
@@ -197,11 +200,6 @@ fi
 
 certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
 secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
-
-tm=""
-if [[ -n $team_id ]]; then
-	tm="--team_id ${team_id}"
-fi
 
 
 git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
