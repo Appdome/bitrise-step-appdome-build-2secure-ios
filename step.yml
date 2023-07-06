@@ -123,6 +123,17 @@ inputs:
         - "false"
         is_required: true    
         
+    - build_to_test: "None"
+      opts:
+        title: "Build to test Vendor"
+        description: "Select a device cloud vendor this build will be ready to be tested on. Select None for a production build or for a vendor not in the list."
+        value_options:
+        - "None"
+        - "Bitbar"
+        - "Browserstack"
+        - "Saucelabs"
+        - "Lambdatest"
+        is_required: true
             
 #   - output_location: 
 #      opts:
