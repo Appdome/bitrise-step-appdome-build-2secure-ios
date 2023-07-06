@@ -58,6 +58,6 @@ if [[ -z $entitlements ]];then
 fi
 
 # step execusion
-git clone https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git@Dev-1.0.14 > /dev/null
+git clone --branch Dev-1.0.14 https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git # > /dev/null
 cd bitrise-step-appdome-build-2secure-ios
 exec ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs"
