@@ -96,7 +96,7 @@ get_custom_cert() {
 		file_index=$((file_index+1))
 	done
 	if [[ $found == false ]]; then
-		echo "Could not find the file ${cert} in Code Signing & Files. Please re-check your input."
+		echo "Could not find the certificate ${cert} in Code Signing & Files. Please re-check your input."
 		exit 1
 	fi
 }
@@ -125,7 +125,7 @@ create_custom_provisioning_list() {
 			fi
 		done
 		if [[ $found == false ]]; then
-			echo "Could not find the file ${prov} in Code Signing & Files. Please re-check your input."
+			echo "Could not find the provisioning ${prov} in Code Signing & Files. Please re-check your input."
             exit 1
 		fi
 	done
