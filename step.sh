@@ -25,6 +25,7 @@ set -e
 
 print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
+	echo "=================================="
 	echo "App location: $app_location"
 	echo "Appdome API key: $APPDOME_API_KEY"
 	echo "Fusion set ID: $fusion_set_id"
@@ -36,6 +37,7 @@ print_all_params() {
 	echo "Build with logs: $build_logs" 
 	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
+	echo "Certificate output (.pdf): $certificate_output"
 	echo "-----------------------------------------"
 }
 
@@ -145,7 +147,6 @@ i=1
 for arg in ${args[@]}
 do
 	args[i]=$arg
-	echo DEBUG: ${args[i]}
    	i=$((i+1))
 done
 
@@ -172,7 +173,10 @@ if [[ $entitlements == "_@_" ]]; then
 	entitlements=""
 else
 	entitlements=${entitlements//"_@_"/" "}
-	echo DEBUG: entitlements: $entitlements
+fi
+
+if [[ $team_id == "_@_" ]]; then
+	team_id=""
 fi
 
 if [[ -z $APPDOME_API_KEY ]]; then
@@ -213,13 +217,6 @@ pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
 pf_list=$(download_files_from_url_list $pf)
 
 if [[ -n $provisioning_profiles ]]; then
-	# BK=$IFS
-	# IFS=""
-	# provisioning_profiles=$(echo $provisioning_profiles | xargs)
-	# provisioning_profiles=${provisioning_profiles//", "/","}
-	# provisioning_profiles=${provisioning_profiles//" ,"/","}
-	# provisioning_profiles=${provisioning_profiles//" "/"_"}
-	# IFS=$BK
 	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
 	pf_list=$provision_list
 fi
