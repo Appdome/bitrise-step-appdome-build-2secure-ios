@@ -135,6 +135,23 @@ create_custom_provisioning_list() {
     fi
 }
 
+args="$@"
+args=${args//"_@_"/""}
+i=1
+for arg in ${args[@]}
+do
+	args[i]=$arg
+   	i=$((i+1))
+done
+
+app_location=${args[1]}
+fusion_set_id=${args[2]}
+team_id=${args[3]}
+sign_method=${args[4]}
+certificate_file=${args[5]}
+provisioning_profiles=${args[6]}
+entitlements=${args[7]}
+build_logs=${args[8]}
 
 if [[ -z $APPDOME_API_KEY ]]; then
 	echo 'No APPDOME_API_KEY was provided. Exiting.'
