@@ -170,6 +170,8 @@ fi
 
 if [[ $entitlements == "_@_" ]]; then
 	entitlements=""
+else
+	entitlements=${entitlements//"_@_"," "}
 fi
 
 if [[ -z $APPDOME_API_KEY ]]; then
@@ -223,10 +225,9 @@ fi
 
 ef=$(echo $entitlements)
 ef_list=$(download_files_from_url_list $ef)
-# ls -al
+
 en=""
 if [[ -n $entitlements ]]; then
-	entitlements=${entitlements//"_@_"," "}
 	en="--entitlements ${ef_list}"
 fi
 
