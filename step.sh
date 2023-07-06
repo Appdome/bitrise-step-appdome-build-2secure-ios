@@ -135,6 +135,8 @@ create_custom_provisioning_list() {
     fi
 }
 
+echo "Internal version: i-1.0.14"
+
 args="$@"
 args=${args//"_@_"/""}
 i=1
