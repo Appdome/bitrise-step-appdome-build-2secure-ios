@@ -138,25 +138,19 @@ create_custom_provisioning_list() {
     fi
 }
 
-echo "Internal version: i-1.0.14"
+internal_version="i-1.0.14"
+echo "Internal version: $internal_version"
+export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
-args="$@"
-i=1
-for arg in ${args[@]}
-do
-	args[i]=$arg
-   	i=$((i+1))
-done
-
-app_location=${args[1]}
-fusion_set_id=${args[2]}
-team_id=${args[3]}
-sign_method=${args[4]}
-certificate_file=${args[5]}
-provisioning_profiles=${args[6]}
-entitlements=${args[7]}
-build_logs=${args[8]}
-build_to_test=${args[9]}
+app_location=$1
+fusion_set_id=$2
+team_id=$3
+sign_method=$4
+certificate_file=$5
+provisioning_profiles=$6
+entitlements=$7
+build_logs=$8
+build_to_test=$9
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
 if [[ $certificate_file == "_@_" ]]; then
@@ -190,7 +184,6 @@ if [[ -z $fusion_set_id ]]; then
 	exit 1
 fi
 
-export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 if [[ $app_location == *"http"* ]];
 then
 	app_file=../$(download_file $app_location)
@@ -229,7 +222,6 @@ bl=""
 if [[ $build_logs == "true" ]]; then
 	bl="-bl"
 fi
-
 
 btv=""
 if [[ $build_to_test != "none" ]]; then
