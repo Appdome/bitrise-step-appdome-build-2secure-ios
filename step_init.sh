@@ -68,8 +68,12 @@ else
     entitlements=${entitlements//" "/"_@_"}
 fi
 
+branch="main"
+if [[ -n $APPDOME_BRANCH_IOS ]]; then
+    branch=$APPDOME_BRANCH_IOS
+
 # step execusion
-git clone --branch Dev-1.0.14 https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
+git clone --branch $branch https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
 cd bitrise-step-appdome-build-2secure-ios
 bash ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test"
 exit $(echo $?)
