@@ -71,6 +71,7 @@ fi
 branch="main"
 if [[ -n $APPDOME_BRANCH_IOS ]]; then
     branch=$APPDOME_BRANCH_IOS
+fi
 
 # step execusion
 git clone --branch $branch https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
