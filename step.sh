@@ -8,7 +8,7 @@ set -e
 # You can export Environment Variables for other Steps with
 #  envman, which is automatically installed by `bitrise setup`.
 # A very simple example:
-# envman add --key EXAMPLE_STEP_OUTPUT --value 'the value you want to share'
+# nvman add --key EXAMPLE_STEP_OUTPUT --value 'the value you want to share'
 # Envman can handle piped inputs, which is useful if the text you want to
 # share is complex and you don't want to deal with proper bash escaping:
 #  cat file_with_complex_input | envman add --KEY EXAMPLE_STEP_OUTPUT
@@ -21,23 +21,55 @@ set -e
 #  with a 0 exit code `bitrise` will register your Step as "successful".
 # Any non zero exit code will be registered as "failed" by `bitrise`.
 
-# This is step_init.sh file for iOS apps
+# This is step.sh file for Android apps
+
+debug () {
+	echo "Debugger:" > $BITRISE_DEPLOY_DIR/debug.txt
+	echo "Keystore file: $keystore_file" >> $BITRISE_DEPLOY_DIR/debug.txt
+	echo "Keystore alias: $keystore_alias" >> $BITRISE_DEPLOY_DIR/debug.txt
+	echo "FP: $gp" >> $BITRISE_DEPLOY_DIR/debug.txt
+	echo "SF: $sf" >> $BITRISE_DEPLOY_DIR/debug.txt 
+	echo "BL: $bl" >> $BITRISE_DEPLOY_DIR/debug.txt 
+	echo "BTV: $btv" >> $BITRISE_DEPLOY_DIR/debug.txt 
+	echo "SO: $so" >> $BITRISE_DEPLOY_DIR/debug.txt 
+
+	ls -al >> $BITRISE_DEPLOY_DIR/debug.txt
+	ls -al .. >> $BITRISE_DEPLOY_DIR/debug.txt
+	echo >> $BITRISE_DEPLOY_DIR/debug.txt
+	echo --api_key $APPDOME_API_KEY \
+		--app $app_file \
+		--fusion_set_id $fusion_set_id \
+		$tm \
+		--sign_on_appdome \
+		--keystore $keystore_file \
+		--keystore_pass $keystore_pass \
+		--keystore_alias $keystore_alias \
+		$gp \
+		$sf \
+		$bl \
+		$btv \
+		$so \
+		--key_pass $key_pass \
+		--output $secured_app_output \
+		--certificate_output $certificate_output >> $BITRISE_DEPLOY_DIR/debug.txt
+}
 
 print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
 	echo "=================================="
 	echo "App location: $app_location"
-	echo "Appdome API key: $APPDOME_API_KEY"
-	echo "Fusion set ID: $fusion_set_id"
 	echo "Team ID: $team_id"
 	echo "Sign Method: $sign_method"
-	echo "Certificate file: $keystore_file" 
-	echo "Provisioning profiles: $pf_list" 
-	echo "Entitelments: $ef_list"
+	echo "Keystore file: $keystore_file" 
+	echo "Keystore alias: $keystore_alias" 
+	echo "Google Play Singing: $gp_signing"
+	echo "Google Fingerprint: $GOOGLE_SIGN_FINGERPRINT" 
+	echo "Sign Fingerprint: $SIGN_FINGERPRINT"
 	echo "Build with logs: $build_logs" 
 	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
 	echo "Certificate output: $certificate_output"
+	echo "Secondary output: $secured_so_app_output"
 	echo "-----------------------------------------"
 }
 
@@ -45,100 +77,10 @@ download_file() {
 	file_location=$1
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
-	curl -L $file_location --output $downloaded_file 
-	new_name=${downloaded_file//"%20"/"_"}
-	mv $downloaded_file $new_name && echo $new_name
+	curl -L $file_location --output $downloaded_file && echo $downloaded_file
 }
 
-download_files_from_url_list() {
-	file_list=""
-	array=$@
-	i=0
-	for element in ${array[@]}
-	do
-		file=$(download_file $element)
-		if [ $i -eq 0 ]; then
- 		file_list=$file
- 		else
- 			file_list="${file_list},${file}"
- 		fi
- 		i=$((i+1))
-	done
-	echo $file_list
-}
-
-convert_env_var_to_url_list() {
-	fullpath=$1
-	fullpath=${fullpath//"|"/" "}
-	n=$(echo $fullpath | grep -o "https:" | wc -l)
-	n=$((n+1))
-	url_list=""
-	for ((i=2; i<=n; i++))
-	do 
-		url="https:"$(echo $fullpath | awk -v i=$i -F "https:" '{print $i}')
-		url_list="${url_list} ${url}"
-	done
-	echo $url_list
-}
-
-get_custom_cert() {
-	BK=$IFS
-	files_list=""
-	cert=$1
-	IFS=","
-	read -ra files_array <<< "$cf_list"
-	IFS=$BK
-	found=false
-	file_index=0			
-	for cert_file in ${files_array[@]};
-	do
-		if [[ $cert_file == $cert ]]; then
-			found=true
-			break
-		fi
-		file_index=$((file_index+1))
-	done
-	if [[ $found == false ]]; then
-		echo "Could not find the certificate ${cert} in Code Signing & Files. Please re-check your input."
-		exit 1
-	fi
-}
-
-create_custom_provisioning_list() {
-	BK=$IFS
-	IFS=","
-	provision_list=""
-	prov_array=$@
-	read -r -a files_array <<< "$pf_list"
-	IFS=$BK
-	for prov in ${prov_array[@]};
-	do
-		found=false
-		for file in ${files_array[@]};
-		do
-			filename="${file%.*}"
-			if [[ $filename == $prov ]]; then
-				found=true
-				if [[ $provision_list == "" ]]; then
-					provision_list=$file
-				else
-					provision_list="${provision_list},${file}"
-				fi
-				break
-			fi
-		done
-		if [[ $found == false ]]; then
-			echo "Could not find the provisioning ${prov} in Code Signing & Files. Please re-check your input."
-            exit 1
-		fi
-	done
-	if [[ $provision_list == "" ]]; then
-		echo "Could not find the given provisioning profiles among those uploaded to Code Signing & Files."
-		exit 1
-    fi
-}
-
-internal_version="RS-i-2.0.0"
+internal_version="RS-A-2.0.0"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
@@ -146,41 +88,16 @@ app_location=$1
 fusion_set_id=$2
 team_id=$3
 sign_method=$4
-certificate_file=$5
-provisioning_profiles=$6
-entitlements=$7
+gp_signing=$5
+google_fingerprint=$6
+fingerprint=$7
 build_logs=$8
 build_to_test=$9
+secondary_output=${10}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
-if [[ $certificate_file == "_@_" ]]; then
-	certificate_file=""
-fi
-
-if [[ $provisioning_profiles == "_@_" ]]; then
-	provisioning_profiles=""
-fi
-
-if [[ $entitlements == "_@_" ]]; then
-	entitlements=""
-else
-	entitlements=${entitlements//"_@_"/" "}
-fi
-
-if [[ $team_id == "_@_" ]]; then
-	team_id=""
-	tm=""
-else
-	tm="--team_id ${team_id}"
-fi
-
 if [[ -z $APPDOME_API_KEY ]]; then
-	echo 'No APPDOME_API_KEY was provided. Exiting.'
-	exit 1
-fi
-
-if [[ -z $fusion_set_id ]]; then
-	echo 'No Fusion Set was provided. Exiting.'
+	echo 'APPDOME_API_KEY must be provided as a Secret. Exiting.'
 	exit 1
 fi
 
@@ -191,36 +108,52 @@ else
 	app_file=$app_location
 fi
 
+so=""
+secured_so_app_output="none"
+extension=${app_file##*.}
+if [[ $extension == "aab" && $secondary_output == "true" ]]; then
+	secured_so_app_output="$BITRISE_DEPLOY_DIR/Appdome_Universal.apk"
+	so="--second_output $secured_so_app_output"
+fi
+
 certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
 secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
 
+if [[ $team_id == "_@_" ]]; then
+	team_id=""
+	tm=""
+else
+	tm="--team_id ${team_id}"
+fi
 
 git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
 
-echo "iOS platform detected"
+echo "Android platform detected"
 
-# download provisioning profiles and set them in a list for later use
-
-pf=$(convert_env_var_to_url_list $BITRISE_PROVISION_URL)
-pf_list=$(download_files_from_url_list $pf)
-
-if [[ -n $provisioning_profiles ]]; then
-	create_custom_provisioning_list $provisioning_profiles	# returns provision_list
-	pf_list=$provision_list
+sf=""
+if [[ -n $fingerprint ]]; then
+	sf="--signing_fingerprint ${fingerprint}"
 fi
 
-ef=$(echo $entitlements)
-ef_list=$(download_files_from_url_list $ef)
-
-en=""
-if [[ -n $entitlements ]]; then
-	en="--entitlements ${ef_list}"
+gp=""
+if [[ $gp_signing == "true" ]]; then
+	if [[ -z $google_fingerprint ]]; then
+		if [[ -z $fingerprint ]]; then
+			echo "Google Sign Fingerprint must be provided for Google Play signing. Exiting."
+			exit 1
+		else
+			echo "Google Sign Fingerprint was not provided, will be using Sign Fringerprint instead."
+			google_fingerprint=$fingerprint
+		fi
+	fi
+	gp="--google_play_signing --signing_fingerprint ${google_fingerprint}"
+	sf=""
 fi
 
 bl=""
 if [[ $build_logs == "true" ]]; then
-	bl="-bl"
+	bl="--build_logs"
 fi
 
 btv=""
@@ -231,19 +164,19 @@ fi
 case $sign_method in
 "Private-Signing")		
 						print_all_params
-						echo "Private Signing"						
+						echo "Private Signing"
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
 							--private_signing \
-							--provisioning_profiles $pf_list \
-							$en \
+							$gp \
+							$sf \
 							$bl \
 							$btv \
+							$so \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
-							
 						;;
 "Auto-Dev-Signing")		
 						print_all_params
@@ -253,35 +186,18 @@ case $sign_method in
 							--fusion_set_id $fusion_set_id \
 							$tm \
 							--auto_dev_private_signing \
-							--provisioning_profiles $pf_list \
-							$en \
+							$gp \
+							$sf \
 							$bl \
 							$btv \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
-							
 						;;
 "On-Appdome")			
-						cf=$(convert_env_var_to_url_list $BITRISE_CERTIFICATE_URL)
-						cf_list=$(download_files_from_url_list $cf)
-						BK=$IFS
-						IFS=","
-						read -ra keystore <<< "$cf_list"
-						IFS="|"
-						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
-						IFS=$BK
-						if [[ -z $certificate_file ]]; then
-							keystore_file=${keystore[0]}
-							keystore_pass=${passwords[0]}
-						else
-							BK=$IFS
-							IFS=""
-							certificate_file=${certificate_file//" "/"_"}
-							IFS=$BK
-							get_custom_cert $certificate_file	# returns $cert_file and file_index of $certificate in $cf_list
-							keystore_file=$cert_file
-							keystore_pass=${passwords[file_index]}
-						fi
+						keystore_file=$(download_file $BITRISEIO_ANDROID_KEYSTORE_URL)
+						keystore_pass=$BITRISEIO_ANDROID_KEYSTORE_PASSWORD
+						keystore_alias=$BITRISEIO_ANDROID_KEYSTORE_ALIAS
+						key_pass=$BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD
 						print_all_params
 						echo "On Appdome Signing"
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
@@ -289,22 +205,29 @@ case $sign_method in
 							--fusion_set_id $fusion_set_id \
 							$tm \
 							--sign_on_appdome \
-							--keystore "$keystore_file" \
+							--keystore $keystore_file \
 							--keystore_pass "$keystore_pass" \
-							--provisioning_profiles $pf_list \
-							$en \
+							--keystore_alias "$keystore_alias" \
+							$gp \
 							$bl \
 							$btv \
-							--output $secured_app_output \
+							$so \
+							--key_pass "$key_pass" \
+							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
-							
 						;;
 esac
 
+
+# rm -rf appdome-api-bash
 if [[ $secured_app_output == *.sh ]]; then
 	envman add --key APPDOME_PRIVATE_SIGN_SCRIPT_PATH --value $secured_app_output
+elif [[ $secured_app_output == *.apk ]]; then
+	envman add --key APPDOME_SECURED_APK_PATH --value $secured_app_output
 else
-	envman add --key APPDOME_SECURED_IPA_PATH --value $secured_app_output
+	envman add --key APPDOME_SECURED_AAB_PATH --value $secured_app_output
+	if [[ -n $so ]]; then
+		envman add --key APPDOME_SECURED_SO_PATH --value $secured_so_app_output
+	fi
 fi
 envman add --key APPDOME_CERTIFICATE_PATH --value $certificate_output
-
