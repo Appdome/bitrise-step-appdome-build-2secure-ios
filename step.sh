@@ -60,7 +60,7 @@ debug() {
 
 
 download_file() {
-	file_location=$1\\n
+	file_location=$1"\\n"
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
 	curl -L $file_location --output $downloaded_file 
