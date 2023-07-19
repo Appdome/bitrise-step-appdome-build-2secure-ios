@@ -50,9 +50,9 @@ debug() {
 	for e in ${ef_array[@]};
 	do
 		echo " --------------------------------" 	>> $debug_file
-		echo "CONTENT OF FILE:" $e				>> $debug_file
-		cat $e											>> $debug_file
-		echo "--------------------------------"	>> $debug_file
+		echo "CONTENT OF FILE:" $e					>> $debug_file
+		cat $e										>> $debug_file
+		echo "--------------------------------"		>> $debug_file
 	done
 	IFS=$BK
 }
