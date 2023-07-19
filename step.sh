@@ -32,6 +32,7 @@ print_all_params() {
 	echo "Team ID: $team_id"
 	echo "Sign Method: $sign_method"
 	echo "Certificate file: $keystore_file" 
+	echo "Certificate password: $keystore_pass"
 	echo "Provisioning profiles: $pf_list" 
 	echo "Entitelments: $ef_list"
 	echo "Build with logs: $build_logs" 
@@ -138,7 +139,7 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-2.0.0"
+internal_version="RS-i-2.0.1"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
@@ -283,6 +284,12 @@ case $sign_method in
 							keystore_pass=${passwords[file_index]}
 						fi
 						print_all_params
+
+						if [[ -z $keystore_pass ]]; then
+							echo "Could not find certificate password. Please recheck Certificate files definition in the Code Signing & Files section."
+							exit 1
+						fi
+
 						echo "On Appdome Signing"
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
