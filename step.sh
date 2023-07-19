@@ -44,7 +44,6 @@ print_all_params() {
 debug() {
 	debug_file=$BITRISE_DEPLOY_DIR/debug.txt
 	echo "Received Entitlements:" $ef > $debug_file
-	echo "Just printing the name" >> $debug_file
 	BK=$IFS
 	IFS=","
 	read -r -a ef_array <<< "$ef_list"
