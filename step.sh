@@ -44,6 +44,7 @@ print_all_params() {
 debug() {
 	debug_file=$BITRISE_DEPLOY_DIR/debug.txt
 	echo "Received Entitlements:" $ef > $debug_file
+	echo "Just printing the name" >> $debug_files
 	BK=$IFS
 	IFS=","
 	read -r -a ef_array <<< "$ef_list"
@@ -60,8 +61,6 @@ debug() {
 
 download_file() {
 	file_location=$1\\n
-	echo $file_location
-	echo "****Just printed the file lacation"
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
 	curl -L $file_location --output $downloaded_file 
