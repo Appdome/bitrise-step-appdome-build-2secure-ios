@@ -41,6 +41,23 @@ print_all_params() {
 	echo "-----------------------------------------"
 }
 
+debug() {
+	debug_file=$BITRISE_DEPLOY_DIR/debug.txt
+	echo "DEBUG: Received Entitelements:" $ef > $debug_file
+	BK=$IFS
+	IFS=","
+	read -r -a ef_array <<< "$ef_list"
+	for e in ${ef_array[@]};
+	do
+		echo "DEBUG: --------------------------------" 	>> $debug_file
+		echo "DEBUG: CONTENT OF FILE:" $e				>> $debug_file
+		cat $e											>> $debug_file
+		echo "DEBUG: --------------------------------"	>> $debug_file
+	done
+	IFS=$BK
+}
+
+
 download_file() {
 	file_location=$1
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
@@ -211,22 +228,12 @@ if [[ -n $provisioning_profiles ]]; then
 fi
 
 ef=$(echo $entitlements)
-echo "DEBUG: Received Entitelements:" $ef
 ef_list=$(download_files_from_url_list $ef)
-BK=$IFS
-IFS=","
-read -r -a ef_array <<< "$ef_list"
-for e in ${ef_array[@]};
-do
-	echo "DEBUG: --------------------------------"
-	echo "DEBUG: CONTENT OF FILE:" $e
-	cat $e
-	echo "DEBUG: --------------------------------"
-done
-IFS=$BK
+
 
 en=""
 if [[ -n $entitlements ]]; then
+	debug
 	en="--entitlements ${ef_list}"
 fi
 
