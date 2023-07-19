@@ -42,7 +42,7 @@ print_all_params() {
 }
 
 download_file() {
-	file_location=$1
+	file_location=$(echo "$1" | tr -cd '\000-\177')
 	uri=$(echo $file_location | awk -F "?" '{print $1}')
 	downloaded_file=$(basename $uri)
 	curl -L $file_location --output $downloaded_file 
