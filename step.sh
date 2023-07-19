@@ -138,7 +138,7 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-2.0.0"
+internal_version="RS-i-debug"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
@@ -211,7 +211,19 @@ if [[ -n $provisioning_profiles ]]; then
 fi
 
 ef=$(echo $entitlements)
+echo "DEBUG: Received Entitelements:" $ef
 ef_list=$(download_files_from_url_list $ef)
+BK=$IFS
+IFS=","
+read -r -a ef_array <<< "$ef_list"
+for e in ${ef_array[@]};
+do
+	echo "DEBUG: --------------------------------"
+	echo "DEBUG: CONTENT OF FILE:" $e
+	cat $e
+	echo "DEBUG: --------------------------------"
+done
+IFS=$BK
 
 en=""
 if [[ -n $entitlements ]]; then
