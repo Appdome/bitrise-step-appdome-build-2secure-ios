@@ -145,15 +145,15 @@ echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
 app_location=$1
-output_filename=$2
-fusion_set_id=$3
-team_id=$4
-sign_method=$5
-certificate_file=$6
-provisioning_profiles=$7
-entitlements=$8
-build_logs=$9
-build_to_test=${10}
+fusion_set_id=$2
+team_id=$3
+sign_method=$4
+certificate_file=$5
+provisioning_profiles=$6
+entitlements=$7
+build_logs=$8
+build_to_test=$9
+output_filename=${10}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
 if [[ $certificate_file == "_@_" ]]; then
