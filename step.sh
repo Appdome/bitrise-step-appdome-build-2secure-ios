@@ -27,6 +27,7 @@ print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
 	echo "=================================="
 	echo "App location: $app_location"
+	echo "Output file: $secured_app_output"
 	echo "Appdome API key: $APPDOME_API_KEY"
 	echo "Fusion set ID: $fusion_set_id"
 	echo "Team ID: $team_id"
@@ -139,19 +140,20 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-2.0.1"
+internal_version="RS-i-2.1"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
 app_location=$1
-fusion_set_id=$2
-team_id=$3
-sign_method=$4
-certificate_file=$5
-provisioning_profiles=$6
-entitlements=$7
-build_logs=$8
-build_to_test=$9
+output_filename=$2
+fusion_set_id=$3
+team_id=$4
+sign_method=$5
+certificate_file=$6
+provisioning_profiles=$7
+entitlements=$8
+build_logs=$9
+build_to_test=${10}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
 if [[ $certificate_file == "_@_" ]]; then
@@ -193,8 +195,11 @@ else
 fi
 
 certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
-secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
-
+if [[ $output_filename == "_@_" ]]; then
+	secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
+else
+	secured_app_output=$BITRISE_DEPLOY_DIR/$output_filename.$extension
+fi
 
 git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
