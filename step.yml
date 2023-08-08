@@ -74,6 +74,12 @@ inputs:
         summary: "URL to app file (ipa) or an EnvVar representing its path (i.e. $BITRISE_IPA_PATH)"
         is_required: true
         
+    - output_filename:
+      opts:
+        title: "Output file name (without extension)"
+        summary: "Output app file name. The file extension (ipa) will be the same as the original app. If not specified, the default output file will be same as the original app but with Appdome_ prefix."
+        is_required: false
+
     - fusion_set_id: 
       opts:
         title: "Fusion set ID"
