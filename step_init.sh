@@ -36,6 +36,10 @@ if [[ -z $app_location ]]; then
     exit 1
 fi
 
+if [[ -z $output_filename ]];then
+    output_filename="_@_"
+fi
+
 if [[ -z $fusion_set_id ]];then
     echo "No Fusion Set ID was provided. Exiting."
     exit 1
@@ -77,5 +81,5 @@ echo "Running Branch: $branch"
 # step execusion
 git clone --branch $branch https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
 cd bitrise-step-appdome-build-2secure-ios
-bash ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test"
+bash ./step.sh "$app_location" "$output_filename" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test"
 exit $(echo $?)
