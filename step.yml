@@ -77,7 +77,7 @@ inputs:
     - output_filename:
       opts:
         title: "Output file name (without extension)"
-        summary: "Output app file name. The file extension (ipa) will be the same as the original app. If not specified, the default output file will be same as the original app but with Appdome_ prefix."
+        summary: "Output app file name (without extension). If not populated, the default output file will be the same as the original app but with Appdome_ prefix."
         is_required: false
 
     - fusion_set_id: 
