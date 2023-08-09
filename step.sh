@@ -195,7 +195,7 @@ else
 fi
 
 certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
-if [[ $output_filename == "_@_" ]]; then
+if [[ $output_filename == "_@_" || -z $output_filename ]]; then
 	secured_app_output=$BITRISE_DEPLOY_DIR/Appdome_$(basename $app_file)
 else
 	secured_app_output=$BITRISE_DEPLOY_DIR/$output_filename.ipa
