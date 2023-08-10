@@ -140,7 +140,7 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-2.1"
+internal_version="RS-i-3.0"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
