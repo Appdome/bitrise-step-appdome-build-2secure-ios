@@ -140,7 +140,7 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-3.0"
+internal_version="RS-i-3.1"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
 
@@ -320,3 +320,7 @@ else
 fi
 envman add --key APPDOME_CERTIFICATE_PATH --value $certificate_output
 
+cd $PWD/..
+pwd=$PWD
+cd $PWD/..
+rm -rf $pwd
