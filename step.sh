@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+# file version: RS-i-3.2
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
 #
@@ -140,9 +140,9 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-2.1"
+internal_version="RS-i-3.2"
 echo "Internal version: $internal_version"
-export APPDOME_CLIENT_HEADER="Bitrise/1.0.0"
+export APPDOME_CLIENT_HEADER="Bitrise/3.2.0"
 
 app_location=$1
 fusion_set_id=$2
@@ -252,8 +252,10 @@ case $sign_method in
 							
 						;;
 "Auto-Dev-Signing")		
-						print_all_params
 						echo "Auto Dev Signing"
+						secured_app_output_name=${secured_app_output%.*}
+						secured_app_output=$secured_app_output_name.sh
+						print_all_params
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
@@ -320,3 +322,7 @@ else
 fi
 envman add --key APPDOME_CERTIFICATE_PATH --value $certificate_output
 
+cd $PWD/..
+pwd=$PWD
+cd $PWD/..
+rm -rf $pwd
