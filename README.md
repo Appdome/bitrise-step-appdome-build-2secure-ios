@@ -1,4 +1,4 @@
-# Appdome-iOS 
+# Appdome-iOS
 
 Appdome iOS build and sign step for Bitrise
 
