@@ -195,7 +195,7 @@ else
 	if [[ $app_location == *" "* ]];
 	then
 		app_file=${app_file//" "/"_"}
-		ls -al
+		ls $HOME/deploy -al
 		echo "app_location: $app_location"
 		echo "app_file: $app_file"
 		echo "cp $app_location $app_file"
