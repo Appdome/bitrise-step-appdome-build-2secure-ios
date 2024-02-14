@@ -187,18 +187,14 @@ if [[ -z $fusion_set_id ]]; then
 	exit 1
 fi
 
-echo "app_location: $app_location"
 if [[ $app_location == *"http"* ]];
 then
 	app_file=../$(download_file $app_location)
 else
 	app_file=$app_location
-	ls -l "$app_location"
 	if [[ $app_location == *" "* ]];
 	then
 		app_file=${app_file//" "/"_"}
-		echo "app_file: $app_file"
-		echo "cp $app_location $app_file"
 		cp "$app_location" "$app_file"
 	fi
 fi
