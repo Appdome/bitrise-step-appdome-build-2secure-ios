@@ -187,12 +187,12 @@ if [[ -z $fusion_set_id ]]; then
 	exit 1
 fi
 
+echo "app_location: $app_location"
 if [[ $app_location == *"http"* ]];
 then
 	app_file=../$(download_file $app_location)
 else
 	app_file=$app_location
-	echo "app_location: $app_location"
 	ls -l "$app_location"
 	if [[ $app_location == *" "* ]];
 	then
