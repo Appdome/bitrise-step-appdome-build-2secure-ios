@@ -193,13 +193,13 @@ then
 else
 	app_file=$app_location
 	echo "app_location: $app_location"
-	pwd
+	ls -l $app_location
 	if [[ $app_location == *" "* ]];
 	then
 		app_file=${app_file//" "/"_"}
 		echo "app_file: $app_file"
 		echo "cp $app_location $app_file"
-		mv $app_location $app_file
+		cp $app_location $app_file
 	fi
 fi
 
