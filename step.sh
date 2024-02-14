@@ -195,8 +195,10 @@ else
 	if [[ $app_location == *" "* ]];
 	then
 		app_file=${app_file//" "/"_"}
+		ls -al
 		echo "app_location: $app_location"
 		echo "app_file: $app_file"
+		echo "cp $app_location $app_file"
 		cp $app_location $app_file
 	fi
 fi
