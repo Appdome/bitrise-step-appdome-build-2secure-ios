@@ -33,7 +33,8 @@ print_all_params() {
 	echo "Team ID: $team_id"
 	echo "Sign Method: $sign_method"
 	echo "Certificate file: $keystore_file" 
-	echo "Certificate password: $keystore_pass"
+	ksp=$keystore_pass
+	echo "Certificate password: $ksp"
 	echo "Provisioning profiles: $pf_list" 
 	echo "Entitelments: $ef_list"
 	echo "Build with logs: $build_logs" 
