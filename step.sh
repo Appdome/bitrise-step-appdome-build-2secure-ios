@@ -285,7 +285,8 @@ case $sign_method in
 						IFS=$BK
 						
 						echo $keystore
-						echo $passwords
+						echo $passwords > tmp.txt
+						cat tmp.txt
 
 						if [[ -z $certificate_file ]]; then
 							keystore_file=${keystore[0]}
