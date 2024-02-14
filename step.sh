@@ -192,7 +192,7 @@ then
 	app_file=../$(download_file $app_location)
 else
 	app_file=$app_location
-	ls $HOME/deploy -al
+	ls -al $HOME/deploy 
 	if [[ $app_location == *" "* ]];
 	then
 		app_file=${app_file//" "/"_"}
