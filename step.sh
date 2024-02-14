@@ -283,11 +283,6 @@ case $sign_method in
 						IFS="|"
 						read -ra passwords <<< "$BITRISE_CERTIFICATE_PASSPHRASE"
 						IFS=$BK
-						
-						echo $keystore
-						# echo $BITRISE_CERTIFICATE_PASSPHRASE > tmp.txt
-						echo $BITRISE_CERTIFICATE_URL > tmp.txt
-						cat tmp.txt
 
 						if [[ -z $certificate_file ]]; then
 							keystore_file=${keystore[0]}
@@ -301,6 +296,14 @@ case $sign_method in
 							keystore_file=$cert_file
 							keystore_pass=${passwords[file_index]}
 						fi
+						k="{$keystore} !!!!"
+						kp="{$keystore_pass} !!!!"
+						echo $k > tmp1.txt
+						echo $kp > tmp2.txt
+						cat tmp1.txt
+						cat tmp2.txt
+
+
 						print_all_params
 
 						if [[ -z $keystore_pass ]]; then
