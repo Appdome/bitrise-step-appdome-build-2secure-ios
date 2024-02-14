@@ -192,6 +192,11 @@ then
 	app_file=../$(download_file $app_location)
 else
 	app_file=$app_location
+	if [[ $app_location == *" "* ]];
+	then
+		app_file=${app_file//" "/"_"}
+		cp $app_location $app_file
+	fi
 fi
 
 certificate_output=$BITRISE_DEPLOY_DIR/certificate.pdf
