@@ -285,7 +285,8 @@ case $sign_method in
 						IFS=$BK
 						
 						echo $keystore
-						echo $BITRISE_CERTIFICATE_PASSPHRASE > tmp.txt
+						# echo $BITRISE_CERTIFICATE_PASSPHRASE > tmp.txt
+						echo $BITRISE_CERTIFICATE_URL > tmp.txt
 						cat tmp.txt
 
 						if [[ -z $certificate_file ]]; then
