@@ -21,7 +21,7 @@ set -e
 #  with a 0 exit code `bitrise` will register your Step as "successful".
 # Any non zero exit code will be registered as "failed" by `bitrise`.
 
-# This is step_init.sh file for iOS apps
+# This is step.sh file for iOS apps
 
 appdome_pipeline_values () {
 	sign_method=$APPDOME_PIPELINE_SIGNING_METHOD
