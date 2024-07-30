@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# file version: RS-i-3.2
+# file version: RS-i-3.3T
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
 #
@@ -22,6 +22,18 @@ set -e
 # Any non zero exit code will be registered as "failed" by `bitrise`.
 
 # This is step_init.sh file for iOS apps
+
+appdome_pipeline_values () {
+	sign_method=$APPDOME_PIPELINE_SIGNING_METHOD
+	 
+	if [[ -n $APPDOME_PIPELINE_BUILD_WITH_LOGS ]]; then
+		build_logs=$APPDOME_PIPELINE_BUILD_WITH_LOGS
+	fi
+
+	if [[ -n $APPDOME_PIPELINE_BUILD_TO_TEST ]]; then
+		build_to_test=$APPDOME_PIPELINE_BUILD_TO_TEST
+	fi
+}
 
 print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
@@ -140,7 +152,7 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-3.3"
+internal_version="RS-i-3.3T"
 echo "Internal version: $internal_version"
 export APPDOME_CLIENT_HEADER="Bitrise/3.3.0"
 
@@ -155,6 +167,11 @@ build_logs=$8
 build_to_test=$9
 output_filename=${10}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
+
+
+if [[ -n $APPDOME_PIPELINE_SIGNING_METHOD ]]; then
+	appdome_pipeline_values
+fi
 
 if [[ $certificate_file == "_@_" ]]; then
 	certificate_file=""
