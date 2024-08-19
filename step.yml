@@ -135,10 +135,16 @@ inputs:
         description: "Select a device cloud vendor this build will be ready for testing on. Select None for a production build or for a vendor not in the list."
         value_options:
         - "None"
+        - "AWS device farm"
         - "Bitbar"
         - "Browserstack"
-        - "Saucelabs"
+        - "Firebase"
+        - "Katalon"
+        - "Kobiton"
         - "Lambdatest"
+        - "Perfecto"
+        - "Tosca"
+        - "Saucelabs"
         is_required: true
             
 #   - output_location: 
