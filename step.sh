@@ -334,6 +334,7 @@ case $sign_method in
 						echo "On Appdome Signing"
 						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
+							$wol \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
@@ -344,7 +345,6 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
-							$wol \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
