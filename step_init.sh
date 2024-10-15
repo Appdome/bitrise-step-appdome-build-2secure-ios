@@ -72,6 +72,10 @@ else
     entitlements=${entitlements//" "/"_@_"}
 fi
 
+if [[ -z $workflow_output_logs ]];then
+    workflow_output_logs="_@_"
+fi
+
 branch="RealStep"
 if [[ -n $APPDOME_BRANCH_IOS ]]; then
     branch=$APPDOME_BRANCH_IOS
@@ -82,5 +86,5 @@ echo "Running Branch: $branch"
 git clone --branch $branch https://github.com/Appdome/bitrise-step-appdome-build-2secure-ios.git > /dev/null
 cd bitrise-step-appdome-build-2secure-ios
 
-bash ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test" "$output_filename"
+bash ./step.sh "$app_location" "$fusion_set_id" "$team_id" "$sign_method" "$certificate_file" "$provisioning_profiles" "$entitlements" "$build_logs" "$build_to_test" "$output_filename" "$workflow_output_logs"
 exit $(echo $?)
