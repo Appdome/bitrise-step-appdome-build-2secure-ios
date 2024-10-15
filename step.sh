@@ -261,7 +261,7 @@ fi
 wol=""
 if [[ $workflow_output_logs != "_@_" ]]; then
 	workflow_output_logs=$BITRISE_DEPLOY_DIR/$workflow_output_logs
-	wol="--workflow_output_logs $workflow_output_logs"
+	wol="--workflow_output_logs ${workflow_output_logs}"
 else
 	workflow_output_logs=""
 fi
@@ -344,9 +344,9 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output $secured_app_output \
 							--certificate_output $certificate_output \
-							$wol 
 							
 						;;
 esac
