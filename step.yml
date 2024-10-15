@@ -146,7 +146,13 @@ inputs:
         - "Tosca"
         - "Saucelabs"
         is_required: true
-            
+
+    - workflow_output_logs:
+      opts:
+        title: "Workflow output logs file name"
+        summary: "File name of the workflow logs."
+        is_required: false 
+                  
 #   - output_location: 
 #      opts:
 #        title: "Build output file"
@@ -183,3 +189,7 @@ outputs:
   opts:    
     title: Certified Secure Certificate .pdf file path   
     summary: Local path of the Certified Secure Certificate .pdf file
+- APPDOME_WORKFLOW_LOGS:  
+  opts:    
+    title: Appdome workflow logs file 
+    summary: Local path of the Appdome workflow logs file 
