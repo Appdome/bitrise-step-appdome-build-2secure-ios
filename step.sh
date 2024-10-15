@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# file version: RS-i-3.3T
+# file version: RS-i-3.4
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
 #
@@ -152,9 +152,9 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-3.3T"
+internal_version="RS-i-3.4"
 echo "Internal version: $internal_version"
-export APPDOME_CLIENT_HEADER="Bitrise/3.3.0"
+export APPDOME_CLIENT_HEADER="Bitrise/3.4.0"
 
 app_location=$1
 fusion_set_id=$2
@@ -166,6 +166,7 @@ entitlements=$7
 build_logs=$8
 build_to_test=$9
 output_filename=${10}
+workflow_output_logs=${11}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
 
 
