@@ -344,7 +344,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
-							--workflow_output_logs $BITRISE_DEPLOY_DIR/logs.txt \
+							--workflow_output_logs logs.txt \
 							--output $secured_app_output \
 							--certificate_output $certificate_output \
 							
