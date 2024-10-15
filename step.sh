@@ -225,7 +225,12 @@ else
 	secured_app_output=$BITRISE_DEPLOY_DIR/$output_filename.ipa
 fi
 
-git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
+branch="master"
+if [[ -n $APPDOME_API_BRANCH ]]; then
+	branch=$APPDOME_API_BRANCH
+fi
+
+git clone --branch $branch https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
 
 echo "iOS platform detected"
@@ -344,7 +349,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
-							--workflow_output_logs logs.txt \
+							$wol \
 							--output $secured_app_output \
 							--certificate_output $certificate_output \
 							
