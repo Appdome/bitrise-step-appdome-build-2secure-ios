@@ -52,6 +52,7 @@ print_all_params() {
 	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
 	echo "Certificate output: $certificate_output"
+	echo "Workflow output logs file: $workflow_output_logs"
 	echo "-----------------------------------------"
 }
 
@@ -257,6 +258,12 @@ if [[ $build_to_test != "none" ]]; then
 	btv="--build_to_test_vendor  $build_to_test"
 fi
 
+wol=""
+if [[ $workflow_output_logs != "_@_" ]]; then
+	workflow_output_logs=$BITRISE_DEPLOY_DIR/$workflow_output_logs
+	wol="--workflow_output_logs ${workflow_output_logs}"
+fi
+
 case $sign_method in
 "Private-Signing")		
 						print_all_params
@@ -270,6 +277,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -288,6 +296,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -332,6 +341,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output $secured_app_output \
 							--certificate_output $certificate_output 
 							
