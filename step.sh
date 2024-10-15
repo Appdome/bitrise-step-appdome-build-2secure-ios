@@ -333,7 +333,7 @@ case $sign_method in
 
 						echo "On Appdome Signing"
 						
-						echo ./appdome_api.sh --api_key $APPDOME_API_KEY \
+						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
 							$tm \
