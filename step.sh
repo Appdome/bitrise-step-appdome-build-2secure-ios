@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# file version: RS-i-3.2
+# file version: RS-i-3.4
 # echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
 #
@@ -21,7 +21,19 @@ set -e
 #  with a 0 exit code `bitrise` will register your Step as "successful".
 # Any non zero exit code will be registered as "failed" by `bitrise`.
 
-# This is step_init.sh file for iOS apps
+# This is step.sh file for iOS apps
+
+appdome_pipeline_values () {
+	sign_method=$APPDOME_PIPELINE_SIGNING_METHOD
+	 
+	if [[ -n $APPDOME_PIPELINE_BUILD_WITH_LOGS ]]; then
+		build_logs=$APPDOME_PIPELINE_BUILD_WITH_LOGS
+	fi
+
+	if [[ -n $APPDOME_PIPELINE_BUILD_TO_TEST ]]; then
+		build_to_test=$APPDOME_PIPELINE_BUILD_TO_TEST
+	fi
+}
 
 print_all_params() {
 	echo "Appdome Build-2Secure parameters:"
@@ -40,6 +52,7 @@ print_all_params() {
 	echo "Build to test: $build_to_test" 
 	echo "Secured app output: $secured_app_output"
 	echo "Certificate output: $certificate_output"
+	echo "Workflow output logs file: $workflow_output_logs"
 	echo "-----------------------------------------"
 }
 
@@ -140,10 +153,11 @@ create_custom_provisioning_list() {
     fi
 }
 
-internal_version="RS-i-3.3"
+
+internal_version="RS-i-3.4"
 
 echo "Internal version: $internal_version"
-export APPDOME_CLIENT_HEADER="Bitrise/3.3.0"
+export APPDOME_CLIENT_HEADER="Bitrise/3.4.0"
 
 app_location=$1
 fusion_set_id=$2
@@ -155,7 +169,13 @@ entitlements=$7
 build_logs=$8
 build_to_test=$9
 output_filename=${10}
+workflow_output_logs=${11}
 build_to_test=$(echo "$build_to_test" | tr '[:upper:]' '[:lower:]')
+
+
+if [[ -n $APPDOME_PIPELINE_SIGNING_METHOD ]]; then
+	appdome_pipeline_values
+fi
 
 if [[ $certificate_file == "_@_" ]]; then
 	certificate_file=""
@@ -207,7 +227,12 @@ else
 	secured_app_output=$BITRISE_DEPLOY_DIR/$output_filename.ipa
 fi
 
-git clone https://github.com/Appdome/appdome-api-bash.git > /dev/null
+branch="master"
+if [[ -n $APPDOME_API_BRANCH ]]; then
+	branch=$APPDOME_API_BRANCH
+fi
+
+git clone --branch $branch https://github.com/Appdome/appdome-api-bash.git > /dev/null
 cd appdome-api-bash
 
 echo "iOS platform detected"
@@ -240,6 +265,14 @@ if [[ $build_to_test != "none" ]]; then
 	btv="--build_to_test_vendor  $build_to_test"
 fi
 
+wol=""
+if [[ $workflow_output_logs != "_@_" ]]; then
+	workflow_output_logs=$BITRISE_DEPLOY_DIR/$workflow_output_logs
+	wol="--workflow_output_logs ${workflow_output_logs}"
+else
+	workflow_output_logs=""
+fi
+
 case $sign_method in
 "Private-Signing")		
 						print_all_params
@@ -253,6 +286,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -271,6 +305,7 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output "$secured_app_output" \
 							--certificate_output $certificate_output 
 							
@@ -304,6 +339,7 @@ case $sign_method in
 						fi
 
 						echo "On Appdome Signing"
+						
 						./appdome_api.sh --api_key $APPDOME_API_KEY \
 							--app $app_file \
 							--fusion_set_id $fusion_set_id \
@@ -315,8 +351,9 @@ case $sign_method in
 							$en \
 							$bl \
 							$btv \
+							$wol \
 							--output $secured_app_output \
-							--certificate_output $certificate_output 
+							--certificate_output $certificate_output \
 							
 						;;
 esac
